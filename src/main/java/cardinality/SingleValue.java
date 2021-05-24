@@ -21,7 +21,7 @@
 
 package cardinality;
 
-public class SingleValue< T >{
+public class SingleValue< T > {
 
 	private final T value;
 

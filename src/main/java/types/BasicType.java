@@ -34,16 +34,16 @@ public class BasicType< T > {
 		return root;
 	}
 
-	public static < R > BasicType< R > parse( Value v, Class< R > c ){
-		if( c.equals( Boolean.class ) )
-				return ( BasicType< R > ) new BasicType<>( v.boolValue() );
-		if( c.equals( Integer.class ) )
+	public static < R > BasicType< R > parse( Value v, Class< R > c ) {
+		if ( c.equals( Boolean.class ) )
+			return ( BasicType< R > ) new BasicType<>( v.boolValue() );
+		if ( c.equals( Integer.class ) )
 			return ( BasicType< R > ) new BasicType<>( v.intValue() );
-		if( c.equals( Double.class ) )
+		if ( c.equals( Double.class ) )
 			return ( BasicType< R > ) new BasicType<>( v.doubleValue() );
-		if( c.equals( Long.class ) )
+		if ( c.equals( Long.class ) )
 			return ( BasicType< R > ) new BasicType<>( v.longValue() );
-		if( c.equals( String.class ) )
+		if ( c.equals( String.class ) )
 			return ( BasicType< R > ) new BasicType<>( v.strValue() );
 		else
 			throw new RuntimeException( "Unsupported root value type " + c );

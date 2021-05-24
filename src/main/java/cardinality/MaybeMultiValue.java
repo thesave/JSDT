@@ -27,13 +27,13 @@ import java.util.stream.Collectors;
 
 public class MaybeMultiValue< T > {
 
-	private final List< Optional < T > > values;
+	private final List< Optional< T > > values;
 
 	public MaybeMultiValue( List< T > values ) {
 		this.values = values.stream().map( Optional::ofNullable ).collect( Collectors.toList() );
 	}
 
-	public List< Optional < T > > getValues(){
+	public List< Optional< T > > getValues() {
 		return values;
 	}
 

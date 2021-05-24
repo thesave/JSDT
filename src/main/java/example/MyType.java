@@ -54,7 +54,7 @@ public class MyType extends BasicType< Void > {
 		MultiValue< MyType_A > a = new MultiValue< MyType_A >(
 						v.getChildren( "a" ).stream()
 										.map( MyType_A::parse )
-										.collect( Collectors.toList()) );
+										.collect( Collectors.toList() ) );
 		return new MyType( a );
 	}
 }

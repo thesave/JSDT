@@ -31,7 +31,7 @@ public class MyType_A_B_1 extends BasicType< String > {
 	}
 
 	public static MyType_A_B_1 parse( Value v ) {
-		if( v.isString() ){
+		if ( v.isString() ) {
 			return new MyType_A_B_1( v.strValue() );
 		} else {
 			return null;

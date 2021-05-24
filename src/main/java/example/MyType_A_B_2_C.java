@@ -30,7 +30,7 @@ public class MyType_A_B_2_C extends BasicType< Boolean > {
 		super( root );
 	}
 
-	public static MyType_A_B_2_C parse( Value v ){
+	public static MyType_A_B_2_C parse( Value v ) {
 		return new MyType_A_B_2_C( v.boolValue() );
 	}
 

@@ -25,18 +25,18 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-public class MultiValue< T >{
+public class MultiValue< T > {
 	private final T value;
 	private final List< Optional< T > > others;
 
 	public MultiValue( List< T > values ) {
-		if( values.get( 0 ) != null ){
+		if ( values.get( 0 ) != null ) {
 			this.value = values.get( 0 );
 		} else {
 			throw new RuntimeException( "Could not create MultiValue, expected non-null first value" );
 		}
-		List< Optional < T > > others = new LinkedList<>();
-		for( int i = 1; i < values.size(); i++ ){
+		List< Optional< T > > others = new LinkedList<>();
+		for ( int i = 1; i < values.size(); i++ ) {
 			others.add( Optional.ofNullable( values.get( i ) ) );
 		}
 		this.others = others;
@@ -46,7 +46,7 @@ public class MultiValue< T >{
 		return value;
 	}
 
-	public List< Optional < T > > getOthers(){
+	public List< Optional< T > > getOthers() {
 		return others;
 	}
 
