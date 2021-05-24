@@ -1,0 +1,16 @@
+plugins {
+    id 'java'
+}
+
+group 'jsdt'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+def libDir = file( "lib" )
+
+dependencies {
+    implementation fileTree( dir: libDir, include: '*.jar' )
+}
