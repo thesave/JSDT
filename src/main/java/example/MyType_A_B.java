@@ -30,10 +30,10 @@ public class MyType_A_B extends ChoiceType< MyType_A_B_1, MyType_A_B_2 > {
 		super( left, right );
 	}
 
-	public static MyType_A_B parse( Value v ){
+	public static MyType_A_B parse( Value v ) {
 		MyType_A_B_1 left = MyType_A_B_1.parse( v );
 		MyType_A_B_2 right = MyType_A_B_2.parse( v );
-		if( left == null && right == null ){
+		if ( left == null && right == null ) {
 			return null;
 		} else {
 			return new MyType_A_B( left, right );

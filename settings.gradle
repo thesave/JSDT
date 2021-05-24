@@ -1,3 +1,3 @@
-rootProject.name = 'TestQuickCheck'
+rootProject.name = 'JSDT'
 include 'src'
 

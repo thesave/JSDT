@@ -42,5 +42,4 @@ public class ChoiceType< L, R > {
 	}
 
 
-
 }
