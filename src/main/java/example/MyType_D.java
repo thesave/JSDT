@@ -21,30 +21,20 @@
 
 package example;
 
-import types.BasicType;
 import jolie.runtime.Value;
-import cardinality.MaybeSingle;
+import types.BasicType;
 
-public class MyType_A extends BasicType< String > {
+public class MyType_D extends BasicType< Integer > {
 
-	private final MaybeSingle< MyType_A_B > b;
-
-	public MyType_A( String root, MaybeSingle< MyType_A_B > b ) {
+	public MyType_D( Integer root ) {
 		super( root );
-		this.b = b;
 	}
-
-	public MaybeSingle< MyType_A_B > b() {
-		return b;
-	}
-
-	public static MyType_A parse( Value v ) {
-		if( v != null && v.isString() ){
-			MaybeSingle< MyType_A_B > b = MaybeSingle.of( MyType_A_B.parse( v.getChildren( "b" ).get( 0 ) ) );
-			return new MyType_A( v.strValue(), b );
+	public static MyType_D parse( Value v ) {
+		if ( v != null && v.isInt() ){
+			return new MyType_D( v.intValue() );
 		} else {
 			return null;
 		}
-
 	}
+
 }

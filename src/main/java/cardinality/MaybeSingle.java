@@ -19,32 +19,18 @@
  * For details about the authors of this software, see the AUTHORS file.      *
  ******************************************************************************/
 
-package example;
+package cardinality;
 
-import types.BasicType;
-import jolie.runtime.Value;
-import cardinality.MaybeSingle;
+import java.util.Optional;
 
-public class MyType_A extends BasicType< String > {
-
-	private final MaybeSingle< MyType_A_B > b;
-
-	public MyType_A( String root, MaybeSingle< MyType_A_B > b ) {
-		super( root );
-		this.b = b;
+// represents ? === [0,1]
+public class MaybeSingle< T > extends Cardinality< Optional < T > >{
+	private MaybeSingle( Optional< T > value ) {
+		super( value );
 	}
 
-	public MaybeSingle< MyType_A_B > b() {
-		return b;
+	public static < T > MaybeSingle< T > of( T value ){
+		return new MaybeSingle<>( Optional.ofNullable( value ) );
 	}
 
-	public static MyType_A parse( Value v ) {
-		if( v != null && v.isString() ){
-			MaybeSingle< MyType_A_B > b = MaybeSingle.of( MyType_A_B.parse( v.getChildren( "b" ).get( 0 ) ) );
-			return new MyType_A( v.strValue(), b );
-		} else {
-			return null;
-		}
-
-	}
 }

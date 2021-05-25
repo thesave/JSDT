@@ -1,7 +1,3 @@
-plugins {
-    id 'java'
-}
-
 group 'jsdt'
 version '1.0-SNAPSHOT'
 
@@ -9,8 +5,26 @@ repositories {
     mavenCentral()
 }
 
+apply plugin: 'java'
+apply plugin: 'antlr'
+apply plugin: 'application'
+
 def libDir = file( "lib" )
 
 dependencies {
+    antlr "org.antlr:antlr4:4.9.2"
     implementation fileTree( dir: libDir, include: '*.jar' )
+}
+
+sourceSets {
+    implementation {
+        java.srcDir 'src/main/java'
+        antlr.srcDir 'src/main/antlr'
+    }
+}
+
+generateGrammarSource {
+    description "Compilation of the Antlr grammar to Java Sources"
+    outputDirectory file('src/main/java/grammar')
+    arguments += ['-package', 'grammar', "-visitor"]
 }

@@ -19,32 +19,33 @@
  * For details about the authors of this software, see the AUTHORS file.      *
  ******************************************************************************/
 
-package example;
+import grammar.JolieTypesLexer;
+import grammar.JolieTypesParser;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
 
-import types.BasicType;
-import jolie.runtime.Value;
-import cardinality.MaybeSingle;
+import java.io.IOException;
 
-public class MyType_A extends BasicType< String > {
+public class JSDT {
 
-	private final MaybeSingle< MyType_A_B > b;
+	public static void main( String[] args ) throws IOException {
+		String s = "type MyType: void {\n" +
+						" a[1,*]: string {\n" +
+						"  b?: string | int {\n" +
+						"  \tc*: boolean\n" +
+						"  \t}\n" +
+						"\t}\n" +
+						"\td: int\n" +
+						"}";
 
-	public MyType_A( String root, MaybeSingle< MyType_A_B > b ) {
-		super( root );
-		this.b = b;
+		CharStream cs = CharStreams.fromString( s );
+		JolieTypesLexer lexer = new JolieTypesLexer( cs );
+		CommonTokenStream tokens = new CommonTokenStream( lexer );
+		JolieTypesParser parser = new JolieTypesParser( tokens );
+		JSDTVisitor visitor = new JSDTVisitor();
+		System.out.println( visitor.visitTypeDeclaration( parser.typeDeclaration() ) );
+
 	}
 
-	public MaybeSingle< MyType_A_B > b() {
-		return b;
-	}
-
-	public static MyType_A parse( Value v ) {
-		if( v != null && v.isString() ){
-			MaybeSingle< MyType_A_B > b = MaybeSingle.of( MyType_A_B.parse( v.getChildren( "b" ).get( 0 ) ) );
-			return new MyType_A( v.strValue(), b );
-		} else {
-			return null;
-		}
-
-	}
 }

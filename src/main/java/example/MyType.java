@@ -3,29 +3,34 @@
  *                                                                            *
  * This program is free software; you can redistribute it and/or modify       *
  * it under the terms of the GNU Library General Public License as            *
- *  published by the Free Software Foundation; either version 2 of the        *
- *  License, or (at your option) any later version.                           *
+ * published by the Free Software Foundation; either version 2 of the         *
+ * License, or (at your option) any later version.                            *
  *                                                                            *
- *  This program is distributed in the hope that it will be useful,           *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of            *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             *
- *  GNU General Public License for more details.                              *
+ * This program is distributed in the hope that it will be useful,            *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of             *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              *
+ * GNU General Public License for more details.                               *
  *                                                                            *
- *  You should have received a copy of the GNU Library General Public         *
- *  License along with this program; if not, write to the                     *
- *  Free Software Foundation, Inc.,                                           *
- *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
+ * You should have received a copy of the GNU Library General Public          *
+ * License along with this program; if not, write to the                      *
+ * Free Software Foundation, Inc.,                                            *
+ * 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                  *
  *                                                                            *
- *  For details about the authors of this software, see the AUTHORS file.     *
+ * For details about the authors of this software, see the AUTHORS file.      *
  ******************************************************************************/
 
 package example;
 
+import cardinality.Multi;
+import cardinality.Single;
+import jolie.runtime.ValueVector;
 import types.BasicType;
 import jolie.runtime.Value;
-import cardinality.MultiValue;
 
+import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /*
 type MyType: void {
@@ -34,27 +39,32 @@ type MyType: void {
   	c*: boolean
   	}
 	}
+	d: int
 }
 */
 
 public class MyType extends BasicType< Void > {
 
-	private final MultiValue< MyType_A > a;
+	private final Multi< MyType_A > a;
+	private final Single< MyType_D > d;
 
-	public MyType( MultiValue< MyType_A > a ) {
+	public MyType( Multi< MyType_A > a, Single< MyType_D > d ) {
 		super( null );
 		this.a = a;
+		this.d = d;
 	}
 
-	public MultiValue< MyType_A > a() {
+	public Multi< MyType_A > a() {
 		return a;
 	}
 
 	public static MyType parse( Value v ) {
-		MultiValue< MyType_A > a = new MultiValue< MyType_A >(
-						v.getChildren( "a" ).stream()
-										.map( MyType_A::parse )
-										.collect( Collectors.toList() ) );
-		return new MyType( a );
+		if( v != null ){
+			Multi< MyType_A > a = Multi.of( v.getChildren( "a" ).stream().map( MyType_A::parse ).collect( Collectors.toList()) );
+			Single< MyType_D > d = Single.of( MyType_D.parse( v.getChildren( "d" ).get( 0 ) ) );
+			return new MyType( a, d );
+		} else {
+			return null;
+		}
 	}
 }
