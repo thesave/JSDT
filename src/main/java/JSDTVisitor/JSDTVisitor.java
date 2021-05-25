@@ -19,77 +19,18 @@
  * For details about the authors of this software, see the AUTHORS file.      *
  ******************************************************************************/
 
-package example;
+package JSDTVisitor;
 
-import jolie.runtime.Value;
-import jolie.runtime.ValuePrettyPrinter;
-import jolie.runtime.ValueVector;
+import com.github.javaparser.ast.CompilationUnit;
+import grammar.JolieTypesParser;
 
-import java.io.IOException;
-import java.io.StringWriter;
-import java.util.Optional;
+import java.util.List;
 
-public class Test {
+public class JSDTVisitor {
 
-	public static void main( String[] args ) {
-
-		Value v = Value.create();
-
-		ValueVector a = v.getChildren( "a" );
-		Value a1 = Value.create();
-		a.add( a1 );
-		a1.setValue( "A1" );
-		Value a2 = Value.create();
-		a.add( a2 );
-		a2.setValue( "A2" );
-		Value a3 = Value.create();
-		a.add( a3 );
-		a3.setValue( "A3" );
-		v.getChildren( "d" ).get( 0 ).setValue( 42 );
-
-
-		Value b2 = Value.create();
-		a2.getChildren( "b" ).add( b2 );
-		b2.setValue( "B1" );
-
-		Value b3 = Value.create();
-		a3.getChildren( "b" ).add( b3 );
-		b3.setValue( 42 );
-		ValueVector c3 = b3.getChildren( "c" );
-		Value c31 = Value.create();
-		c31.setValue( true );
-		c3.add( c31 );
-		Value c32 = Value.create();
-		c32.setValue( false );
-		c3.add( c32 );
-
-		debugInfo( v );
-
-		// PARSE INTO TYPED VALUE
-		MyType typedValue = MyType.parse( v );
-
-		typedValue.a().get().stream()
-						.filter( Optional::isPresent )
-						.map( _a -> _a.get().b().get() )
-						.filter( Optional::isPresent )
-						.map( Optional::get )
-						.map( b -> b.left().isPresent() ?
-										b.left().get() :
-										b.right().get()
-						)
-						.forEach( b -> System.out.println( b.root() ) );
+	public static List< CompilationUnit > visit( JolieTypesParser.TypeDeclarationContext typeDeclaration ) {
+		JSDTVisitorImplementation visitor = new JSDTVisitorImplementation();
+		return visitor.visit( typeDeclaration );
 	}
-
-
-	public static void debugInfo( Value v ) {
-		StringWriter w = new StringWriter();
-		try {
-			new ValuePrettyPrinter( v, w, "" ).run();
-		} catch ( IOException e ) {
-			e.printStackTrace();
-		}
-		System.out.println( w );
-	}
-
 
 }

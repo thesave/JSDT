@@ -76,18 +76,6 @@ public class JolieTypesBaseListener implements JolieTypesListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNativeTypeOrIdentifier(JolieTypesParser.NativeTypeOrIdentifierContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitNativeTypeOrIdentifier(JolieTypesParser.NativeTypeOrIdentifierContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterCardinality(JolieTypesParser.CardinalityContext ctx) { }
 	/**
 	 * {@inheritDoc}

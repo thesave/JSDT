@@ -23,11 +23,10 @@ public class JolieTypesParser extends Parser {
 		LINE_COMMENT=22;
 	public static final int
 		RULE_typeDeclaration = 0, RULE_nativeType = 1, RULE_nodes = 2, RULE_subNodes = 3, 
-		RULE_typeChoice = 4, RULE_nativeTypeOrIdentifier = 5, RULE_cardinality = 6;
+		RULE_typeChoice = 4, RULE_cardinality = 5;
 	private static String[] makeRuleNames() {
 		return new String[] {
-			"typeDeclaration", "nativeType", "nodes", "subNodes", "typeChoice", "nativeTypeOrIdentifier", 
-			"cardinality"
+			"typeDeclaration", "nativeType", "nodes", "subNodes", "typeChoice", "cardinality"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
@@ -134,30 +133,30 @@ public class JolieTypesParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(14);
+			setState(12);
 			match(T__0);
-			setState(15);
+			setState(13);
 			match(Identifier);
-			setState(16);
+			setState(14);
 			match(T__1);
-			setState(17);
+			setState(15);
 			nativeType();
-			setState(19);
+			setState(17);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__10) {
 				{
-				setState(18);
+				setState(16);
 				nodes();
 				}
 			}
 
-			setState(22);
+			setState(20);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__13) {
 				{
-				setState(21);
+				setState(19);
 				typeChoice();
 				}
 			}
@@ -202,7 +201,7 @@ public class JolieTypesParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(24);
+			setState(22);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__2) | (1L << T__3) | (1L << T__4) | (1L << T__5) | (1L << T__6) | (1L << T__7) | (1L << T__8) | (1L << T__9))) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -258,23 +257,23 @@ public class JolieTypesParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(26);
+			setState(24);
 			match(T__10);
-			setState(28); 
+			setState(26); 
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			do {
 				{
 				{
-				setState(27);
+				setState(25);
 				subNodes();
 				}
 				}
-				setState(30); 
+				setState(28); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			} while ( _la==T__12 || _la==Identifier );
-			setState(32);
+			setState(30);
 			match(T__11);
 			}
 		}
@@ -291,8 +290,8 @@ public class JolieTypesParser extends Parser {
 
 	public static class SubNodesContext extends ParserRuleContext {
 		public TerminalNode Identifier() { return getToken(JolieTypesParser.Identifier, 0); }
-		public NativeTypeOrIdentifierContext nativeTypeOrIdentifier() {
-			return getRuleContext(NativeTypeOrIdentifierContext.class,0);
+		public NativeTypeContext nativeType() {
+			return getRuleContext(NativeTypeContext.class,0);
 		}
 		public CardinalityContext cardinality() {
 			return getRuleContext(CardinalityContext.class,0);
@@ -329,48 +328,48 @@ public class JolieTypesParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(35);
+			setState(33);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__12) {
 				{
-				setState(34);
+				setState(32);
 				match(T__12);
 				}
 			}
 
-			setState(37);
+			setState(35);
 			match(Identifier);
-			setState(39);
+			setState(37);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << Single) | (1L << MaybeSingle) | (1L << Multi))) != 0)) {
 				{
-				setState(38);
+				setState(36);
 				cardinality();
 				}
 			}
 
-			setState(41);
+			setState(39);
 			match(T__1);
+			setState(40);
+			nativeType();
 			setState(42);
-			nativeTypeOrIdentifier();
-			setState(44);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__10) {
 				{
-				setState(43);
+				setState(41);
 				nodes();
 				}
 			}
 
-			setState(47);
+			setState(45);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__13) {
 				{
-				setState(46);
+				setState(44);
 				typeChoice();
 				}
 			}
@@ -389,8 +388,8 @@ public class JolieTypesParser extends Parser {
 	}
 
 	public static class TypeChoiceContext extends ParserRuleContext {
-		public NativeTypeOrIdentifierContext nativeTypeOrIdentifier() {
-			return getRuleContext(NativeTypeOrIdentifierContext.class,0);
+		public NativeTypeContext nativeType() {
+			return getRuleContext(NativeTypeContext.class,0);
 		}
 		public NodesContext nodes() {
 			return getRuleContext(NodesContext.class,0);
@@ -424,97 +423,30 @@ public class JolieTypesParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(49);
+			setState(47);
 			match(T__13);
+			setState(48);
+			nativeType();
 			setState(50);
-			nativeTypeOrIdentifier();
-			setState(52);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__10) {
 				{
-				setState(51);
+				setState(49);
 				nodes();
 				}
 			}
 
-			setState(55);
+			setState(53);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__13) {
 				{
-				setState(54);
+				setState(52);
 				typeChoice();
 				}
 			}
 
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class NativeTypeOrIdentifierContext extends ParserRuleContext {
-		public NativeTypeContext nativeType() {
-			return getRuleContext(NativeTypeContext.class,0);
-		}
-		public TerminalNode Identifier() { return getToken(JolieTypesParser.Identifier, 0); }
-		public NativeTypeOrIdentifierContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_nativeTypeOrIdentifier; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof JolieTypesListener ) ((JolieTypesListener)listener).enterNativeTypeOrIdentifier(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof JolieTypesListener ) ((JolieTypesListener)listener).exitNativeTypeOrIdentifier(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof JolieTypesVisitor ) return ((JolieTypesVisitor<? extends T>)visitor).visitNativeTypeOrIdentifier(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	public final NativeTypeOrIdentifierContext nativeTypeOrIdentifier() throws RecognitionException {
-		NativeTypeOrIdentifierContext _localctx = new NativeTypeOrIdentifierContext(_ctx, getState());
-		enterRule(_localctx, 10, RULE_nativeTypeOrIdentifier);
-		try {
-			setState(59);
-			_errHandler.sync(this);
-			switch (_input.LA(1)) {
-			case T__2:
-			case T__3:
-			case T__4:
-			case T__5:
-			case T__6:
-			case T__7:
-			case T__8:
-			case T__9:
-				enterOuterAlt(_localctx, 1);
-				{
-				setState(57);
-				nativeType();
-				}
-				break;
-			case Identifier:
-				enterOuterAlt(_localctx, 2);
-				{
-				setState(58);
-				match(Identifier);
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
 			}
 		}
 		catch (RecognitionException re) {
@@ -553,12 +485,12 @@ public class JolieTypesParser extends Parser {
 
 	public final CardinalityContext cardinality() throws RecognitionException {
 		CardinalityContext _localctx = new CardinalityContext(_ctx, getState());
-		enterRule(_localctx, 12, RULE_cardinality);
+		enterRule(_localctx, 10, RULE_cardinality);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(61);
+			setState(55);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << Single) | (1L << MaybeSingle) | (1L << Multi))) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -582,24 +514,23 @@ public class JolieTypesParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\30B\4\2\t\2\4\3\t"+
-		"\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\3\2\3\2\3\2\3\2\3\2\5\2\26"+
-		"\n\2\3\2\5\2\31\n\2\3\3\3\3\3\4\3\4\6\4\37\n\4\r\4\16\4 \3\4\3\4\3\5\5"+
-		"\5&\n\5\3\5\3\5\5\5*\n\5\3\5\3\5\3\5\5\5/\n\5\3\5\5\5\62\n\5\3\6\3\6\3"+
-		"\6\5\6\67\n\6\3\6\5\6:\n\6\3\7\3\7\5\7>\n\7\3\b\3\b\3\b\2\2\t\2\4\6\b"+
-		"\n\f\16\2\4\3\2\5\f\3\2\21\23\2D\2\20\3\2\2\2\4\32\3\2\2\2\6\34\3\2\2"+
-		"\2\b%\3\2\2\2\n\63\3\2\2\2\f=\3\2\2\2\16?\3\2\2\2\20\21\7\3\2\2\21\22"+
-		"\7\25\2\2\22\23\7\4\2\2\23\25\5\4\3\2\24\26\5\6\4\2\25\24\3\2\2\2\25\26"+
-		"\3\2\2\2\26\30\3\2\2\2\27\31\5\n\6\2\30\27\3\2\2\2\30\31\3\2\2\2\31\3"+
-		"\3\2\2\2\32\33\t\2\2\2\33\5\3\2\2\2\34\36\7\r\2\2\35\37\5\b\5\2\36\35"+
-		"\3\2\2\2\37 \3\2\2\2 \36\3\2\2\2 !\3\2\2\2!\"\3\2\2\2\"#\7\16\2\2#\7\3"+
-		"\2\2\2$&\7\17\2\2%$\3\2\2\2%&\3\2\2\2&\'\3\2\2\2\')\7\25\2\2(*\5\16\b"+
-		"\2)(\3\2\2\2)*\3\2\2\2*+\3\2\2\2+,\7\4\2\2,.\5\f\7\2-/\5\6\4\2.-\3\2\2"+
-		"\2./\3\2\2\2/\61\3\2\2\2\60\62\5\n\6\2\61\60\3\2\2\2\61\62\3\2\2\2\62"+
-		"\t\3\2\2\2\63\64\7\20\2\2\64\66\5\f\7\2\65\67\5\6\4\2\66\65\3\2\2\2\66"+
-		"\67\3\2\2\2\679\3\2\2\28:\5\n\6\298\3\2\2\29:\3\2\2\2:\13\3\2\2\2;>\5"+
-		"\4\3\2<>\7\25\2\2=;\3\2\2\2=<\3\2\2\2>\r\3\2\2\2?@\t\3\2\2@\17\3\2\2\2"+
-		"\f\25\30 %).\61\669=";
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\30<\4\2\t\2\4\3\t"+
+		"\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\3\2\3\2\3\2\3\2\3\2\5\2\24\n\2\3\2"+
+		"\5\2\27\n\2\3\3\3\3\3\4\3\4\6\4\35\n\4\r\4\16\4\36\3\4\3\4\3\5\5\5$\n"+
+		"\5\3\5\3\5\5\5(\n\5\3\5\3\5\3\5\5\5-\n\5\3\5\5\5\60\n\5\3\6\3\6\3\6\5"+
+		"\6\65\n\6\3\6\5\68\n\6\3\7\3\7\3\7\2\2\b\2\4\6\b\n\f\2\4\3\2\5\f\3\2\21"+
+		"\23\2>\2\16\3\2\2\2\4\30\3\2\2\2\6\32\3\2\2\2\b#\3\2\2\2\n\61\3\2\2\2"+
+		"\f9\3\2\2\2\16\17\7\3\2\2\17\20\7\25\2\2\20\21\7\4\2\2\21\23\5\4\3\2\22"+
+		"\24\5\6\4\2\23\22\3\2\2\2\23\24\3\2\2\2\24\26\3\2\2\2\25\27\5\n\6\2\26"+
+		"\25\3\2\2\2\26\27\3\2\2\2\27\3\3\2\2\2\30\31\t\2\2\2\31\5\3\2\2\2\32\34"+
+		"\7\r\2\2\33\35\5\b\5\2\34\33\3\2\2\2\35\36\3\2\2\2\36\34\3\2\2\2\36\37"+
+		"\3\2\2\2\37 \3\2\2\2 !\7\16\2\2!\7\3\2\2\2\"$\7\17\2\2#\"\3\2\2\2#$\3"+
+		"\2\2\2$%\3\2\2\2%\'\7\25\2\2&(\5\f\7\2\'&\3\2\2\2\'(\3\2\2\2()\3\2\2\2"+
+		")*\7\4\2\2*,\5\4\3\2+-\5\6\4\2,+\3\2\2\2,-\3\2\2\2-/\3\2\2\2.\60\5\n\6"+
+		"\2/.\3\2\2\2/\60\3\2\2\2\60\t\3\2\2\2\61\62\7\20\2\2\62\64\5\4\3\2\63"+
+		"\65\5\6\4\2\64\63\3\2\2\2\64\65\3\2\2\2\65\67\3\2\2\2\668\5\n\6\2\67\66"+
+		"\3\2\2\2\678\3\2\2\28\13\3\2\2\29:\t\3\2\2:\r\3\2\2\2\13\23\26\36#\',"+
+		"/\64\67";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

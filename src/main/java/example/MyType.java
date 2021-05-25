@@ -23,14 +23,10 @@ package example;
 
 import cardinality.Multi;
 import cardinality.Single;
-import jolie.runtime.ValueVector;
 import types.BasicType;
 import jolie.runtime.Value;
 
-import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 /*
 type MyType: void {

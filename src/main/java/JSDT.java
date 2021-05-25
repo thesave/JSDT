@@ -19,6 +19,7 @@
  * For details about the authors of this software, see the AUTHORS file.      *
  ******************************************************************************/
 
+import JSDTVisitor.JSDTVisitor;
 import grammar.JolieTypesLexer;
 import grammar.JolieTypesParser;
 import org.antlr.v4.runtime.CharStream;
@@ -33,7 +34,7 @@ public class JSDT {
 		String s = "type MyType: void {\n" +
 						" a[1,*]: string {\n" +
 						"  b?: string | int {\n" +
-						"  \tc*: boolean\n" +
+						"  \tc*: bool\n" +
 						"  \t}\n" +
 						"\t}\n" +
 						"\td: int\n" +
@@ -43,8 +44,8 @@ public class JSDT {
 		JolieTypesLexer lexer = new JolieTypesLexer( cs );
 		CommonTokenStream tokens = new CommonTokenStream( lexer );
 		JolieTypesParser parser = new JolieTypesParser( tokens );
-		JSDTVisitor visitor = new JSDTVisitor();
-		System.out.println( visitor.visitTypeDeclaration( parser.typeDeclaration() ) );
+		System.out.println( JSDTVisitor.visit( parser.typeDeclaration() ) );
+
 
 	}
 

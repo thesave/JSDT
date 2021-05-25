@@ -41,12 +41,6 @@ public interface JolieTypesVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitTypeChoice(JolieTypesParser.TypeChoiceContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link JolieTypesParser#nativeTypeOrIdentifier}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitNativeTypeOrIdentifier(JolieTypesParser.NativeTypeOrIdentifierContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link JolieTypesParser#cardinality}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

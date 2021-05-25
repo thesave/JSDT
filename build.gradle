@@ -13,6 +13,7 @@ def libDir = file( "lib" )
 
 dependencies {
     antlr "org.antlr:antlr4:4.9.2"
+    implementation 'com.github.javaparser:javaparser-core:3.22.1'
     implementation fileTree( dir: libDir, include: '*.jar' )
 }
 

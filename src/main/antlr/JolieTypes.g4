@@ -30,13 +30,10 @@ nativeType: 'void' | 'bool' | 'int' | 'long' | 'string' | 'byte' | 'any' | 'unde
 nodes: '{' subNodes+ '}'
 	;
 
-subNodes: '.'? Identifier cardinality? ':' nativeTypeOrIdentifier nodes? typeChoice?
+subNodes: '.'? Identifier cardinality? ':' nativeType nodes? typeChoice?
 	;
 
-typeChoice: '|' nativeTypeOrIdentifier nodes? typeChoice?
-	;
-
-nativeTypeOrIdentifier: nativeType | Identifier
+typeChoice: '|' nativeType nodes? typeChoice?
 	;
 
 cardinality:  Single | MaybeSingle | Multi

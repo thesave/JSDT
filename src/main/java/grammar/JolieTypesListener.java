@@ -58,16 +58,6 @@ public interface JolieTypesListener extends ParseTreeListener {
 	 */
 	void exitTypeChoice(JolieTypesParser.TypeChoiceContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link JolieTypesParser#nativeTypeOrIdentifier}.
-	 * @param ctx the parse tree
-	 */
-	void enterNativeTypeOrIdentifier(JolieTypesParser.NativeTypeOrIdentifierContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link JolieTypesParser#nativeTypeOrIdentifier}.
-	 * @param ctx the parse tree
-	 */
-	void exitNativeTypeOrIdentifier(JolieTypesParser.NativeTypeOrIdentifierContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link JolieTypesParser#cardinality}.
 	 * @param ctx the parse tree
 	 */
