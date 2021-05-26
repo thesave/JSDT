@@ -1,5 +1,5 @@
 group 'jsdt'
-version '1.0-SNAPSHOT'
+version '0.1'
 
 repositories {
     mavenCentral()
@@ -11,9 +11,16 @@ apply plugin: 'application'
 
 def libDir = file( "lib" )
 
+configurations {
+    jsdt {
+        extendsFrom implementation
+    }
+}
+
 dependencies {
     antlr "org.antlr:antlr4:4.9.2"
     implementation 'com.github.javaparser:javaparser-core:3.22.1'
+    implementation 'info.picocli:picocli:4.6.1'
     implementation fileTree( dir: libDir, include: '*.jar' )
 }
 
@@ -25,7 +32,18 @@ sourceSets {
 }
 
 generateGrammarSource {
-    description "Compilation of the Antlr grammar to Java Sources"
-    outputDirectory file('src/main/java/grammar')
-    arguments += ['-package', 'grammar', "-visitor"]
+    description "Compilation of the Antlr jsdt.grammar to Java Sources"
+    outputDirectory file('src/main/java/jsdt/grammar')
+    arguments += ['-package', 'jsdt.grammar', "-visitor"]
+}
+
+def jarOutputFolder = "dist"
+
+jar {
+    destinationDirectory = file( jarOutputFolder )
+    manifest.attributes 'Main-Class': 'jsdt.JSDT'
+    setDuplicatesStrategy( DuplicatesStrategy.WARN )
+    from {
+        configurations.jsdt.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }

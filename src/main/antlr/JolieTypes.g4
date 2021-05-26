@@ -21,6 +21,9 @@
 
 grammar JolieTypes;
 
+types: typeDeclaration+
+ ;
+
 typeDeclaration: 'type' Identifier ':' nativeType nodes? typeChoice?
 	;
 
