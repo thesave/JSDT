@@ -7,7 +7,7 @@ JSDT is a tool to generate Java classes from a Jolie interface and its types (us
 ```
 Usage: jsdt [-hV] [--compileTypes] [--type] [--dstDir=<dstDir>][--package=<packageName>] <file> <symbolName>
 JavaService Development Tool
-      <file>              The .ol file containing the type(s) and/or interface(s) to compile.
+      <file>                  The .ol file containing the type(s) and/or interface(s) to compile.
       <symbolName>            The name of the symbol source target of the compilation. By default it is an interface.
       --compileTypes          Compile also the types used by the target interface.
       --dstDir=<dstDir>       The path of the destination directory of the generated Java classes.
