@@ -31,10 +31,12 @@ import picocli.CommandLine;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
+import java.util.Properties;
 import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 
@@ -117,17 +119,28 @@ public class JSDT implements Callable< Integer > {
 			e.printStackTrace();
 			return 1;
 		}
-//		new CommandLine( this ).usage( System.err );
-//		return 1;
 	}
 
 	static class VersionProvider implements CommandLine.IVersionProvider {
 
 		@Override
 		public String[] getVersion() throws Exception {
-			return new String[]{ "jsdt.JSDT version 0.1" };
+			Properties properties = ProjectPropertiesLoader.loadPropertyFile( JSDT.class.getClassLoader() );
+			return new String[]{ "JSDT version " + properties.getProperty( "version" ) };
 		}
 	}
+
+	static class ProjectPropertiesLoader {
+
+		public static Properties loadPropertyFile( ClassLoader c ) throws IOException {
+			Properties properties = new Properties();
+			String propertiesFileName = "project.properties";
+			InputStream inputStream = c.getResourceAsStream( propertiesFileName );
+			properties.load( inputStream );
+			return properties;
+		}
+	}
+
 
 }
 

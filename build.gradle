@@ -1,5 +1,4 @@
 group 'jsdt'
-version '0.1'
 
 repositories {
     mavenCentral()
@@ -24,6 +23,9 @@ dependencies {
     implementation fileTree( dir: libDir, include: '*.jar' )
 }
 
+
+import org.apache.tools.ant.filters.ReplaceTokens
+
 sourceSets {
     implementation {
         java.srcDir 'src/main/java'
@@ -38,6 +40,17 @@ generateGrammarSource {
 }
 
 def jarOutputFolder = "dist"
+
+version "0.2"
+
+task setVersion {
+    File file = projectDir.toPath().resolve("src/main/resources/project.properties" ).toFile();
+    if( ! file.exists() ){
+        file.createNewFile()
+    }
+    file.write "version=" + version
+}
+compileJava.dependsOn( setVersion )
 
 jar {
     destinationDirectory = file( jarOutputFolder )
