@@ -42,22 +42,47 @@ class JSDTVisitorImplementation implements JolieTypesVisitor< Void > {
 
 	private final List< CompilationUnit > compilationUnits;
 	private final String packageName;
-	private final String typeName;
 	private final Stack< String > lineage;
+	private final Set< String > collectedInterfaceTypes;
 
-	public JSDTVisitorImplementation( String typeName, String packageName ) {
+	private JSDTVisitorImplementation( String packageName ) {
 		this.compilationUnits = new LinkedList<>();
-		this.packageName = packageName;
-		this.typeName = typeName;
 		this.lineage = new Stack<>();
+		this.packageName = packageName;
+		this.collectedInterfaceTypes = new HashSet<>();
 	}
 
-	public List< CompilationUnit > visit( JolieTypesParser.TypesContext ctx ) {
-		ctx.typeDeclaration().stream()
-						.filter( td -> td.Identifier().getText().equals( typeName ) )
-						.forEach( this::visitTypeDeclaration );
-		return this.compilationUnits;
+	public static List< CompilationUnit > generateTypeClasses( String symbolName, String packageName, List< JolieTypesParser.TypeDeclarationContext > ctx ) {
+		JSDTVisitorImplementation jsdt = new JSDTVisitorImplementation( packageName );
+		ctx.stream()
+						.filter( td -> td.Identifier().getText().equals( symbolName ) )
+						.forEach( jsdt::visitTypeDeclaration );
+		return jsdt.compilationUnits;
 	}
+
+	public static List< CompilationUnit > generateInterfaceClass( String symbolName, String packageName, List< JolieTypesParser.InterfaceDeclarationContext > ctx ) {
+		JSDTVisitorImplementation jsdt = new JSDTVisitorImplementation( packageName );
+		ctx.stream()
+						.filter( id -> id.Identifier().getText().equals( symbolName ) )
+						.forEach( jsdt::visitInterfaceDeclaration );
+		return jsdt.compilationUnits;
+	}
+
+	public static List< CompilationUnit >
+	generateInterfaceAndTypeClasses( String symbolName,
+																	 String packageName,
+																	 List< JolieTypesParser.InterfaceDeclarationContext > ctx,
+																	 List< JolieTypesParser.TypeDeclarationContext > types_ctx ) {
+		JSDTVisitorImplementation jsdt = new JSDTVisitorImplementation( packageName );
+		ctx.stream().filter( id -> id.Identifier().getText().equals( symbolName ) )
+						.forEach( jsdt::visitInterfaceDeclaration );
+		jsdt.collectedInterfaceTypes.forEach( typeName -> {
+			types_ctx.stream().filter( td -> td.Identifier().getText().equals( symbolName ) )
+							.forEach( jsdt::visitTypeDeclaration );
+		});
+		return jsdt.compilationUnits;
+	}
+
 
 	private String jolieToJavaType( JolieTypesParser.NativeTypeContext ctx ) {
 		switch ( ctx.getText() ) {
@@ -78,7 +103,7 @@ class JSDTVisitorImplementation implements JolieTypesVisitor< Void > {
 		}
 	}
 
-	private Optional< String > jolieToIsValue( JolieTypesParser.NativeTypeContext ctx ){
+	private Optional< String > jolieToIsValue( JolieTypesParser.NativeTypeContext ctx ) {
 		String checker = null;
 		switch ( ctx.getText() ) {
 			case "void":
@@ -104,11 +129,13 @@ class JSDTVisitorImplementation implements JolieTypesVisitor< Void > {
 		return Optional.ofNullable( checker );
 	}
 
-	private Optional< String > jolieToGetValue( JolieTypesParser.NativeTypeContext ctx ){
+	private Optional< String > jolieToGetValueOptional( JolieTypesParser.NativeTypeContext ctx ) {
+		return Optional.ofNullable( jolieToGetValue( ctx.getText() ) );
+	}
+
+	private String jolieToGetValue( String basicTypeName ) {
 		String getter = null;
-		switch ( ctx.getText() ) {
-			case "void":
-				break;
+		switch ( basicTypeName ) {
 			case "bool":
 				getter = "boolValue";
 				break;
@@ -124,10 +151,10 @@ class JSDTVisitorImplementation implements JolieTypesVisitor< Void > {
 			case "byte":
 				getter = "byteArrayValue";
 				break;
-			default: // "any" or "undefined"
+			default: // "void", "any" or "undefined"
 				;
 		}
-		return Optional.ofNullable( getter );
+		return getter;
 	}
 
 	private Cardinalities getCardinalityClass( JolieTypesParser.CardinalityContext ctx ) {
@@ -140,7 +167,7 @@ class JSDTVisitorImplementation implements JolieTypesVisitor< Void > {
 		}
 	}
 
-	private String getLineage(){
+	private String getLineage() {
 		return String.join( "_", lineage );
 	}
 
@@ -148,7 +175,7 @@ class JSDTVisitorImplementation implements JolieTypesVisitor< Void > {
 					JolieTypesParser.NativeTypeContext nativeType,
 					JolieTypesParser.NodesContext nodes,
 					JolieTypesParser.TypeChoiceContext typeChoice
-	){
+	) {
 		CompilationUnit compilationUnit = new CompilationUnit();
 		compilationUnit.setPackageDeclaration( packageName );
 
@@ -169,10 +196,15 @@ class JSDTVisitorImplementation implements JolieTypesVisitor< Void > {
 			MethodDeclaration parseMethod = theClass.addMethod( "parse", Modifier.Keyword.PUBLIC, Modifier.Keyword.STATIC );
 			parseMethod.addParameter( "Value", "value" );
 
+			MethodDeclaration toValueMethod = theClass.addMethod( "toValue", Modifier.Keyword.PUBLIC );
+			BlockStmt toValueMethodBody = toValueMethod.createBody();
+			toValueMethodBody.addStatement( "Value value = super.toValue();" );
+			toValueMethod.setType( "Value" );
+
 			StringJoiner parseReturnParameters = new StringJoiner( ", " );
-			if( ! nativeType.getText().equals( "void" ) ){
+			if ( !nativeType.getText().equals( "void" ) ) {
 				parseReturnParameters.add(
-								jolieToGetValue( nativeType ).isEmpty() ? "value" : "value." + jolieToGetValue( nativeType ).get() + "()" );
+								jolieToGetValueOptional( nativeType ).isEmpty() ? "value" : "value." + jolieToGetValueOptional( nativeType ).get() + "()" );
 			}
 
 			parseMethod.setType( new ClassOrInterfaceType().setName( getLineage() ) );
@@ -187,7 +219,7 @@ class JSDTVisitorImplementation implements JolieTypesVisitor< Void > {
 			parseIfStm.setElseStmt( new BlockStmt().addStatement( "return null;" ) );
 			parseIfStm.setThenStmt( ifBranch );
 
-			if ( ! nativeType.getText().equals( "void" ) ) {
+			if ( !nativeType.getText().equals( "void" ) ) {
 				constructorDeclaration.addParameter( jolieToJavaType( nativeType ), "root" );
 				constructorDeclarationBody.addStatement( "super( root );" );
 			} else {
@@ -203,7 +235,7 @@ class JSDTVisitorImplementation implements JolieTypesVisitor< Void > {
 
 					Cardinalities cardinalityClass = getCardinalityClass( node.cardinality() );
 					compilationUnit.addImport( "jsdt.cardinality." + cardinalityClass );
-					if( cardinalityClass.equals( Cardinalities.Multi ) ){
+					if ( cardinalityClass.equals( Cardinalities.Multi ) ) {
 						compilationUnit.addImport( "java.util.stream.Collectors" );
 					}
 					FieldDeclaration field = theClass.addField(
@@ -236,10 +268,12 @@ class JSDTVisitorImplementation implements JolieTypesVisitor< Void > {
 					}
 					ifBranch.addStatement( s.toString() );
 					parseReturnParameters.add( nodeName );
+					toValueMethodBody.addStatement( "this." + nodeName + "().addChildenIfNotEmpty(\"" + nodeName + "\", value);" );
 					lineage.pop();
 				} );
 			}
 			ifBranch.addStatement( "return new " + getLineage() + "(" + parseReturnParameters + ");" );
+			toValueMethodBody.addStatement( "return value;" );
 
 			compilationUnits.add( compilationUnit );
 
@@ -268,7 +302,6 @@ class JSDTVisitorImplementation implements JolieTypesVisitor< Void > {
 
 			MethodDeclaration parseMethod = theClass.addMethod( "parse", Modifier.Keyword.PUBLIC, Modifier.Keyword.STATIC );
 			parseMethod.addParameter( "Value", "value" );
-
 			parseMethod.setType( new ClassOrInterfaceType().setName( getLineage() ) );
 			BlockStmt parseBody = parseMethod.createBody();
 			parseBody.addStatement( leftClassName + " left = " + leftClassName + ".parse( value );" );
@@ -291,8 +324,90 @@ class JSDTVisitorImplementation implements JolieTypesVisitor< Void > {
 		}
 	}
 
+	private void assembleOneWayMethod( MethodDeclaration methodDeclaration, String requestTypeName ) {
+		collectedInterfaceTypes.add( requestTypeName );
+		// we do not set the type of the method, since, if it is not set, it defaults to void
+		methodDeclaration.setModifiers( Modifier.Keyword.PUBLIC );
+		methodDeclaration.addParameter( "Value", "value" );
+		BlockStmt methodBody = methodDeclaration.createBody();
+		switch ( requestTypeName ) {
+			case "void":
+				break;
+			case "bool":
+				methodBody.addStatement( "boolean request = value." + jolieToGetValue( requestTypeName ) + "();" );
+				break;
+			case "int":
+				methodBody.addStatement( "int request = value." + jolieToGetValue( requestTypeName ) + "();" );
+				break;
+			case "long":
+				methodBody.addStatement( "long request = value." + jolieToGetValue( requestTypeName ) + "();" );
+				break;
+			case "string":
+				methodBody.addStatement( "String request = value." + jolieToGetValue( requestTypeName ) + "();" );
+				break;
+			case "byte":
+				methodBody.addStatement( "ByteArray request = value." + jolieToGetValue( requestTypeName ) + "();" );
+				break;
+			default:
+				methodBody.addStatement( requestTypeName + " request = " + requestTypeName + ".parse( value );" );
+		}
+	}
+
+	private void assembleRequestResponseMethod( MethodDeclaration methodDeclaration, String requestTypeName, String responseTypeName ) {
+		collectedInterfaceTypes.add( responseTypeName );
+		methodDeclaration.setType( "Value" );
+		assembleOneWayMethod( methodDeclaration, requestTypeName );
+	}
+
 	@Override
-	public Void visitTypes( JolieTypesParser.TypesContext ctx ) {
+	public Void visitTypesOrInterfaces( JolieTypesParser.TypesOrInterfacesContext ctx ) {
+		return null;
+	}
+
+	@Override
+	public Void visitInterfaceDeclaration( JolieTypesParser.InterfaceDeclarationContext ctx ) {
+		CompilationUnit compilationUnit = new CompilationUnit();
+		compilationUnit.addImport( "jolie.runtime.JavaService" );
+		compilationUnit.addImport( "jolie.runtime.Value" );
+		compilationUnit.setPackageDeclaration( packageName );
+		ClassOrInterfaceDeclaration theClass = compilationUnit.addClass( ctx.Identifier().getText() + "Service" );
+		theClass.setModifier( Modifier.Keyword.PUBLIC, true );
+		theClass.addExtendedType( "JavaService" );
+		ctx.oneWays().forEach( oneWaysContext -> {
+			MethodDeclaration methodDeclaration = theClass.addMethod( oneWaysContext.operation.getText() );
+			assembleOneWayMethod( methodDeclaration, oneWaysContext.oneWayType.getText() );
+		} );
+		ctx.requestResponses().forEach( requestResponsesContext -> {
+			MethodDeclaration methodDeclaration = theClass.addMethod( requestResponsesContext.operation.getText() );
+			compilationUnit.addImport( "jolie.runtime.embedding.RequestResponse" );
+			methodDeclaration.addAnnotation( "RequestResponse" );
+			assembleRequestResponseMethod(
+							methodDeclaration,
+							requestResponsesContext.requestType.getText(),
+							requestResponsesContext.responseType.getText()
+			);
+		} );
+		compilationUnits.add( compilationUnit );
+		return null;
+	}
+
+	@Override
+	public Void visitOneWays( JolieTypesParser.OneWaysContext ctx ) {
+		return null;
+	}
+
+	@Override
+	public Void visitRequestResponses( JolieTypesParser.RequestResponsesContext ctx ) {
+		return null;
+	}
+
+	@Override
+	public Void visitThrowTypeList( JolieTypesParser.ThrowTypeListContext ctx ) {
+		return null;
+	}
+
+	@Override
+	public Void visitIdentifierOrNativeType( JolieTypesParser.IdentifierOrNativeTypeContext ctx ) {
 		return null;
 	}
 

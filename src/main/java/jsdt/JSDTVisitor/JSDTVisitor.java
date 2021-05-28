@@ -22,15 +22,27 @@
 package jsdt.JSDTVisitor;
 
 import com.github.javaparser.ast.CompilationUnit;
+import jsdt.grammar.JolieTypesLexer;
 import jsdt.grammar.JolieTypesParser;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 public class JSDTVisitor {
 
-	public static List< CompilationUnit > visit( JolieTypesParser.TypesContext types, String typeName, String packageName ) {
-		JSDTVisitorImplementation visitor = new JSDTVisitorImplementation( typeName, packageName );
-		return visitor.visit( types );
+	public static List< CompilationUnit > visitInterfaces( List< JolieTypesParser.InterfaceDeclarationContext > interfaces, String interfaceName, String packageName ){
+		return JSDTVisitorImplementation.generateInterfaceClass( interfaceName, packageName, interfaces );
+	}
+
+	public static List< CompilationUnit > visitTypes( List< JolieTypesParser.TypeDeclarationContext > types, String typeName, String packageName ){
+		return JSDTVisitorImplementation.generateTypeClasses( typeName, packageName, types );
+	}
+
+	public static List< CompilationUnit > visit( List< JolieTypesParser.InterfaceDeclarationContext > interfaces, String interfaceName, String packageName, List< JolieTypesParser.TypeDeclarationContext > types ){
+		return JSDTVisitorImplementation.generateInterfaceAndTypeClasses( interfaceName, packageName, interfaces, types );
 	}
 
 }

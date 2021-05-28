@@ -21,9 +21,11 @@
 
 package jsdt.types;
 
+import jolie.runtime.Value;
+
 import java.util.Optional;
 
-public class ChoiceType< L, R > {
+public class ChoiceType< L , R > {
 
 	private final L left;
 	private final R right;
@@ -39,6 +41,26 @@ public class ChoiceType< L, R > {
 
 	public Optional< R > right() {
 		return Optional.ofNullable( right );
+	}
+
+	public Value toValue(){
+		if( this.left().isPresent() ){
+			if( this.left().get() instanceof BasicType ){
+				return ( ( BasicType<?> ) this.left().get() ).toValue();
+			} else if ( this.left().get() instanceof ChoiceType ){
+				return ( ( ChoiceType<?,?> ) this.left().get() ).toValue();
+			} else {
+				throw new RuntimeException( "Expected to find classes extending either BasicType or ChoiceType, found " + this.left().get().getClass() );
+			}
+		} else {
+			if( this.right().get() instanceof BasicType ){
+				return ( ( BasicType<?> ) this.right().get() ).toValue();
+			} else if ( this.right().get() instanceof ChoiceType ){
+				return ( ( ChoiceType<?,?> ) this.right().get() ).toValue();
+			} else {
+				throw new RuntimeException( "Expected to find classes extending either BasicType or ChoiceType, found " + this.right().get().getClass() );
+			}
+		}
 	}
 
 }

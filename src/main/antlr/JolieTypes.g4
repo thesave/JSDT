@@ -21,8 +21,31 @@
 
 grammar JolieTypes;
 
-types: typeDeclaration+
- ;
+typesOrInterfaces: ( typeDeclaration | interfaceDeclaration )+
+	;
+
+interfaceDeclaration: ( 'interface' | 'Interface' ) Identifier '{'
+	( ( 'oneWay' | 'OneWay' ) ':' oneWays* )?
+  ( ( 'requestResponse' | 'RequestResponse' ) ':' requestResponses* )?
+	 '}'
+	;
+
+oneWays: operation=Identifier '(' oneWayType=identifierOrNativeType ')'
+	;
+
+requestResponses:
+	operation=Identifier
+	'(' requestType=identifierOrNativeType ')'
+	'(' responseType=identifierOrNativeType ')'
+	( 'throws' throwTypeList )?
+	;
+
+throwTypeList:
+	identifierOrNativeType ( ',' throwTypeList )?
+	;
+
+identifierOrNativeType: ( Identifier | nativeType )
+	;
 
 typeDeclaration: 'type' Identifier ':' nativeType nodes? typeChoice?
 	;

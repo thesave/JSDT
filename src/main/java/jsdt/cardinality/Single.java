@@ -21,6 +21,11 @@
 
 package jsdt.cardinality;
 
+import jolie.runtime.Value;
+import jolie.runtime.ValueVector;
+import jsdt.types.BasicType;
+import jsdt.types.ChoiceType;
+
 public class Single< T > extends Cardinality< T >{
 
 	private Single( T value ) {
@@ -32,6 +37,25 @@ public class Single< T > extends Cardinality< T >{
 			throw new RuntimeException( "Expected single value, found none" );
 		} else {
 			return new Single<>( value );
+		}
+	}
+
+	@Override
+	public void addChildenIfNotEmpty( String name, Value destination ) {
+		ValueVector values = ValueVector.create();
+		if ( this.get() instanceof Value ) {
+			values.add( ( Value ) this.get() );
+		} else {
+			if ( this.get() instanceof BasicType ) {
+				values.add( ( ( BasicType<?> ) this.get() ).toValue() );
+			} else if ( this.get() instanceof ChoiceType ) {
+				values.add( ( ( ChoiceType<?,?> ) this.get() ).toValue() );
+			} else {
+				throw new RuntimeException( "Expected to find classes extending either BasicType or ChoiceType, found " + this.get().getClass() );
+			}
+		}
+		if( ! values.isEmpty() ){
+			destination.children().put( name, values );
 		}
 	}
 

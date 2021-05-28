@@ -21,6 +21,7 @@
 
 package example;
 
+import jolie.runtime.ValueVector;
 import jsdt.cardinality.Multi;
 import jsdt.cardinality.Single;
 import jsdt.types.BasicType;
@@ -54,6 +55,10 @@ public class MyType extends BasicType< Void > {
 		return a;
 	}
 
+	public Single< MyType_D > d() {
+		return d;
+	}
+
 	public static MyType parse( Value v ) {
 		if( v != null ){
 			Multi< MyType_A > a = Multi.of( v.getChildren( "a" ).stream().map( MyType_A::parse ).collect( Collectors.toList()) );
@@ -63,4 +68,12 @@ public class MyType extends BasicType< Void > {
 			return null;
 		}
 	}
+
+	public Value toValue(){
+		Value value = super.toValue();
+		this.a().addChildenIfNotEmpty( "a", value );
+		this.d().addChildenIfNotEmpty( "d", value );
+		return value;
+	}
+
 }

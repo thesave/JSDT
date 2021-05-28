@@ -21,6 +21,11 @@
 
 package jsdt.cardinality;
 
+import jolie.runtime.Value;
+import jolie.runtime.ValueVector;
+import jsdt.types.BasicType;
+import jsdt.types.ChoiceType;
+
 import java.util.Optional;
 
 // represents ? === [0,1]
@@ -31,6 +36,34 @@ public class MaybeSingle< T > extends Cardinality< Optional < T > >{
 
 	public static < T > MaybeSingle< T > of( T value ){
 		return new MaybeSingle<>( Optional.ofNullable( value ) );
+	}
+
+	@Override
+	public void addChildenIfNotEmpty( String name, Value destination ){
+		ValueVector values = ValueVector.create();
+		if( this.get().isPresent() ){
+			if( this.get().get() instanceof Value ){
+				values.add( ( Value ) this.get().get() );
+			} else {
+				if ( this.get().get() instanceof Value ) {
+					values.add( ( Value ) this.get().get() );
+				} else {
+					if ( this.get().get() instanceof BasicType ) {
+						values.add( ( ( BasicType<?> ) this.get().get() ).toValue() );
+					} else if ( this.get().get() instanceof ChoiceType ) {
+						values.add( ( ( ChoiceType<?,?> ) this.get().get() ).toValue() );
+					} else {
+						throw new RuntimeException( "Expected to find classes extending either BasicType or ChoiceType, found " + this.get().get().getClass() );
+					}
+				}
+				if( ! values.isEmpty() ){
+					destination.children().put( name, values );
+				}
+			}
+		}
+		if ( !values.isEmpty() ){
+			destination.children().put( name, values );
+		}
 	}
 
 }

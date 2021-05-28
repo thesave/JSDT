@@ -47,11 +47,17 @@ import java.util.stream.Collectors;
 )
 public class JSDT implements Callable< Integer > {
 
-	@CommandLine.Parameters(index = "0", description = "The .ol file containing the type(s) to be compiled.")
+	@CommandLine.Parameters(index = "0", description = "The .ol file containing the type(s) and/or interface(s) to compile.")
 	private File file;
 
-	@CommandLine.Parameters(index = "1", description = "The name of the type to be compiled.")
-	private String typeName;
+	@CommandLine.Parameters(index = "1", description = "The name of the symbol source target of the compilation. By default it is an interface.")
+	private String symbolName;
+
+	@CommandLine.Option(names = { "--type" }, description = "Indicates that the target symbol is a type, instead of an interface.")
+	private boolean targetIsType;
+
+	@CommandLine.Option(names = { "--compileTypes" }, description = "Compile also the types used by the target interface.")
+	private boolean compileTypes;
 
 	@CommandLine.Option(names = { "--package" }, description = "The name of the package of the generated Java classes.")
 	private String packageName;
@@ -77,10 +83,17 @@ public class JSDT implements Callable< Integer > {
 			JolieTypesLexer lexer = new JolieTypesLexer( cs );
 			CommonTokenStream tokens = new CommonTokenStream( lexer );
 			JolieTypesParser parser = new JolieTypesParser( tokens );
-			packageName = ( packageName == null ) ? typeName : packageName;
-			List< CompilationUnit  > compilationUnits = JSDTVisitor.visit(
-							parser.types(), typeName, packageName );
-			if( compilationUnits.isEmpty() ){
+			packageName = ( packageName == null ) ? symbolName : packageName;
+			List< CompilationUnit  > compilationUnits = null;
+			JolieTypesParser.TypesOrInterfacesContext ctx = parser.typesOrInterfaces();
+			if( targetIsType ){
+				compilationUnits = JSDTVisitor.visitTypes( ctx.typeDeclaration(), symbolName, packageName );
+			} else if( compileTypes ){
+				compilationUnits = JSDTVisitor.visit( ctx.interfaceDeclaration(), symbolName, packageName, ctx.typeDeclaration() );
+			} else {
+				compilationUnits = JSDTVisitor.visitInterfaces( ctx.interfaceDeclaration(), symbolName, packageName );
+			}
+			if( compilationUnits == null || compilationUnits.isEmpty() ){
 				System.err.println( "No classes have been generated. Please, check the input file and the launch parameters." );
 			} else {
 				Path destinationPath = Path.of( dstDir ).resolve( packageName );

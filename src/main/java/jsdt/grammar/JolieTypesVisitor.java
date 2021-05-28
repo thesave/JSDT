@@ -11,11 +11,41 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface JolieTypesVisitor<T> extends ParseTreeVisitor<T> {
 	/**
-	 * Visit a parse tree produced by {@link JolieTypesParser#types}.
+	 * Visit a parse tree produced by {@link JolieTypesParser#typesOrInterfaces}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitTypes(JolieTypesParser.TypesContext ctx);
+	T visitTypesOrInterfaces(JolieTypesParser.TypesOrInterfacesContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link JolieTypesParser#interfaceDeclaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitInterfaceDeclaration(JolieTypesParser.InterfaceDeclarationContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link JolieTypesParser#oneWays}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitOneWays(JolieTypesParser.OneWaysContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link JolieTypesParser#requestResponses}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRequestResponses(JolieTypesParser.RequestResponsesContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link JolieTypesParser#throwTypeList}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitThrowTypeList(JolieTypesParser.ThrowTypeListContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link JolieTypesParser#identifierOrNativeType}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIdentifierOrNativeType(JolieTypesParser.IdentifierOrNativeTypeContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link JolieTypesParser#typeDeclaration}.
 	 * @param ctx the parse tree

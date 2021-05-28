@@ -21,6 +21,11 @@
 
 package jsdt.cardinality;
 
+import jolie.runtime.Value;
+import jolie.runtime.ValueVector;
+import jsdt.types.BasicType;
+import jsdt.types.ChoiceType;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +42,24 @@ public class Multi< T > extends Cardinality< List< Optional< T > > > {
 			return new Multi<>( Collections.emptyList() );
 		} else {
 			return new Multi<>( values.stream().map( Optional::ofNullable ).collect( Collectors.toList() ) );
+		}
+	}
+
+	@Override
+	public void addChildenIfNotEmpty( String name, Value destination ) {
+		ValueVector values = ValueVector.create();
+		this.get().stream().filter( Optional::isPresent ).forEach( v -> {
+							if ( v.get() instanceof BasicType ) {
+								values.add( ( ( BasicType<?> ) v.get() ).toValue() );
+							} else if ( v.get() instanceof ChoiceType ) {
+								values.add( ( ( ChoiceType<?,?> ) v.get() ).toValue() );
+							} else {
+								throw new RuntimeException( "Expected to find classes extending either BasicType or ChoiceType, found " + v.getClass() );
+							}
+						}
+		);
+		if( ! values.isEmpty() ){
+			destination.children().put( name, values );
 		}
 	}
 

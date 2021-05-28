@@ -45,6 +45,12 @@ public class MyType_A extends BasicType< String > {
 		} else {
 			return null;
 		}
-
 	}
+
+	public Value toValue(){
+		Value value = super.toValue();
+		this.b().addChildenIfNotEmpty( "b", value );
+		return value;
+	}
+
 }

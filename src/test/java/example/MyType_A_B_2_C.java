@@ -38,5 +38,10 @@ public class MyType_A_B_2_C extends BasicType< Boolean > {
 		}
 	}
 
+	public Value toValue(){
+		Value value = super.toValue();
+		return value;
+	}
+
 
 }

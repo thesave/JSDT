@@ -51,4 +51,11 @@ public class MyType_A_B_2 extends BasicType< Integer > {
 			return null;
 		}
 	}
+
+	public Value toValue(){
+		Value value = super.toValue();
+		this.c().addChildenIfNotEmpty( "c", value );
+		return value;
+	}
+
 }

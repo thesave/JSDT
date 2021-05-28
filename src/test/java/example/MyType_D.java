@@ -28,12 +28,18 @@ public class MyType_D extends BasicType< Integer > {
 	public MyType_D( Integer root ) {
 		super( root );
 	}
+
 	public static MyType_D parse( Value v ) {
 		if ( v != null && v.isInt() ){
 			return new MyType_D( v.intValue() );
 		} else {
 			return null;
 		}
+	}
+
+	public Value toValue(){
+		Value value = super.toValue();
+		return value;
 	}
 
 }

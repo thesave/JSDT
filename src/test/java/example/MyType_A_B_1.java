@@ -36,4 +36,11 @@ public class MyType_A_B_1 extends BasicType< String > {
 			return null;
 		}
 	}
+
+	public Value toValue() {
+		Value value = super.toValue();
+		return value;
+	}
+
+
 }

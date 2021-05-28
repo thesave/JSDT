@@ -49,4 +49,12 @@ public class BasicType< T > {
 			throw new RuntimeException( "Unsupported root value type " + c );
 	}
 
+	public Value toValue(){
+		Value value = Value.create();
+		if( this.root() != null ){
+			value.setValue( this.root() );
+		}
+		return value;
+	}
+
 }

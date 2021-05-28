@@ -78,8 +78,11 @@ public class Test {
 										b.right().get()
 						)
 						.forEach( b -> System.out.println( b.root() ) );
-	}
 
+		// reconstruct original value
+		debugInfo( typedValue.toValue() );
+
+	}
 
 	public static void debugInfo( Value v ) {
 		StringWriter w = new StringWriter();
@@ -90,6 +93,5 @@ public class Test {
 		}
 		System.out.println( w );
 	}
-
 
 }

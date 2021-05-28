@@ -16,13 +16,73 @@ public class JolieTypesBaseListener implements JolieTypesListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterTypes(JolieTypesParser.TypesContext ctx) { }
+	@Override public void enterTypesOrInterfaces(JolieTypesParser.TypesOrInterfacesContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitTypes(JolieTypesParser.TypesContext ctx) { }
+	@Override public void exitTypesOrInterfaces(JolieTypesParser.TypesOrInterfacesContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterInterfaceDeclaration(JolieTypesParser.InterfaceDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitInterfaceDeclaration(JolieTypesParser.InterfaceDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterOneWays(JolieTypesParser.OneWaysContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitOneWays(JolieTypesParser.OneWaysContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterRequestResponses(JolieTypesParser.RequestResponsesContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitRequestResponses(JolieTypesParser.RequestResponsesContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterThrowTypeList(JolieTypesParser.ThrowTypeListContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitThrowTypeList(JolieTypesParser.ThrowTypeListContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterIdentifierOrNativeType(JolieTypesParser.IdentifierOrNativeTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIdentifierOrNativeType(JolieTypesParser.IdentifierOrNativeTypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
