@@ -4,6 +4,8 @@ JSDT is a tool to generate Java classes from a Jolie interface and its types (us
 
 Given a Jolie file containing only interfaces and types, JSDT generates a class for a target interface and possibly the types used in its operations.
 
+JSDT generates idiomatic classes to build and access Jolie types, using the [core](https://github.com/thesave/JSDT/tree/main/src/core/java/jsdt/core) classes `Single`, `MaybeSingle`, and `Multi` classes (which capture the cardinality of Jolie nodes) and the `BasicType` and `ChoiceType` classes (for representing basic and choice Jolie types.
+
 ## Dependencies
 
 JSDT has no dependencies (the released jar contains them already)
@@ -43,4 +45,4 @@ JavaService Development Tool
 
 ## Roadmap
 
-[] resolve type-to-type references 
+- [ ] resolve type-to-type references 
