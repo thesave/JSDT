@@ -2,7 +2,31 @@
 
 JSDT is a tool to generate Java classes from a Jolie interface and its types (used by its operations).
 
+Given a Jolie file containing only interfaces and types, JSDT generates a class for a target interface and possibly the types used in its operations.
+
+## Dependencies
+
+JSDT has no dependencies (the released jar contains them already)
+
+The generated code has the following dependencies:
+
+- [jolie](https://mvnrepository.com/artifact/org.jolie-lang/jolie)
+- [libjolie](https://mvnrepository.com/artifact/org.jolie-lang/libjolie)
+- [jsdt-core](https://github.com/thesave/JSDT/releases) (from this repository)
+
 ## Usage
+
+### Example
+
+Generate the class interface `MyInterface` and its types from the `MyInterface.ol` file (e.g., [as found in the test folder](https://github.com/thesave/JSDT/tree/main/src/test/jolie)), using `src` as output destination.
+
+`java -jar jsdt-{version}.jar --compileTypes --dstDir=src MyInterface MyInterface.ol`
+
+To compile the generated Java sources with javac one can use the following command
+
+`javac -jar -cp jolie-{jolie-version}.jar:libjolie-{jolie-version}.jar:jsdt-core-{version}.jar src/MyInterface/*`
+
+### Complete commands
 
 ```
 Usage: jsdt [-hV] [--compileTypes] [--type] [--dstDir=<dstDir>][--package=<packageName>] <file> <symbolName>
