@@ -2,9 +2,13 @@
 
 JSDT is a tool to generate Java classes from a Jolie interface and its types (used by its operations).
 
-Given a Jolie file containing only interfaces and types, JSDT generates a class for a target interface and possibly the types used in its operations.
+Given a Jolie file containing only interfaces and types, JSDT generates a class for a target interface and possibly the types used in its operations. The tool can also just generate the classes relative to a target Type.
 
-JSDT generates idiomatic classes to build and access Jolie types, using the [core](https://github.com/thesave/JSDT/tree/main/src/core/java/jsdt/core) classes `Single`, `MaybeSingle`, and `Multi` classes (which capture the cardinality of Jolie nodes) and the `BasicType` and `ChoiceType` classes (for representing basic and choice Jolie types.
+JSDT generates Java-idiomatic classes to manage in a transparent way Jolie data structures (Values and ValueVectors). The generated classes use the [core](https://github.com/thesave/JSDT/tree/main/src/core/java/jsdt/core) classes `Single`, `MaybeSingle`, and `Multi` classes (which capture the cardinality of Jolie nodes) and the `BasicType` and `ChoiceType` classes (for representing basic and choice Jolie types).
+
+For interfaces, JSDT minimises the boilerplate code developers need to write by generating a skeleton JavaService that implements the operations in the interface and that, as their first action, convert (`parse`) the request (a Jolie `Value`) into the relative JSDT-generated Java class.
+
+For types, JSDT generates classes providing a `parse` (static) and `toValue` method to respetively instantiate a JSDT-generated class from a Jolie Value (e.g., useful to convert the Value parameter from an invocation) and, vice versa, to obtain a Jolie Value from an instance of a JSDT-generated class (e.g., to assemble the response for an invocation).
 
 ## Dependencies
 
@@ -45,4 +49,6 @@ JavaService Development Tool
 
 ## Roadmap
 
-- [ ] resolve type-to-type references 
+- [ ] resolve type references
+- [ ] resolve imports 
+- [ ] accept any Jolie file as input
