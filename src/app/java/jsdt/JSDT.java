@@ -90,6 +90,7 @@ public class JSDT implements Callable< Integer > {
 			packageName = ( packageName == null ) ? symbolName : packageName;
 			List< CompilationUnit > compilationUnits = null;
 			JolieTypesParser.TypesOrInterfacesContext ctx = parser.typesOrInterfaces();
+			System.out.println( "targetIsType = " + targetIsType + " compileTypes: " + compileTypes );
 			if ( targetIsType ) {
 				compilationUnits = JSDTVisitor.visitTypes( ctx.typeDeclaration(), symbolName, packageName );
 			} else if ( compileTypes ) {

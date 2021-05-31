@@ -77,7 +77,7 @@ class JSDTVisitorImplementation implements JolieTypesVisitor< Void > {
 		ctx.stream().filter( id -> id.Identifier().getText().equals( symbolName ) )
 						.forEach( jsdt::visitInterfaceDeclaration );
 		jsdt.collectedInterfaceTypes.forEach( typeName -> {
-			types_ctx.stream().filter( td -> td.Identifier().getText().equals( symbolName ) )
+			types_ctx.stream().filter( td -> td.Identifier().getText().equals( typeName ) )
 							.forEach( jsdt::visitTypeDeclaration );
 		} );
 		return jsdt.compilationUnits;
