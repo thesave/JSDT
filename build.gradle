@@ -74,7 +74,6 @@ task jarApplication( type: Jar ) {
     setDuplicatesStrategy( DuplicatesStrategy.WARN )
     from sourceSets.app.output
     from sourceSets.core.output
-    println configurations.app.resolve().toArray()
     from {
         configurations.app.collect { it.isDirectory() ? it : zipTree(it) }
     }
