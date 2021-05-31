@@ -10,25 +10,29 @@ For interfaces, JSDT minimises the boilerplate code developers need to write by 
 
 For types, JSDT generates classes providing a `parse` (static) and `toValue` method to respetively instantiate a JSDT-generated class from a Jolie Value (e.g., useful to convert the Value parameter from an invocation) and, vice versa, to obtain a Jolie Value from an instance of a JSDT-generated class (e.g., to assemble the response for an invocation).
 
+## Installation
+
+Download the latest `jsdt-{version}.jar` file from the [release page](https://github.com/thesave/JSDT/releases).
+
 ## Dependencies
 
 JSDT has no dependencies (the released jar contains them already)
 
 The generated code has the following dependencies:
 
-- [jolie](https://mvnrepository.com/artifact/org.jolie-lang/jolie)
-- [libjolie](https://mvnrepository.com/artifact/org.jolie-lang/libjolie)
-- [jsdt-core](https://github.com/thesave/JSDT/releases) (from this repository)
+- [jolie](https://mvnrepository.com/artifact/org.jolie-lang/jolie);
+- [libjolie](https://mvnrepository.com/artifact/org.jolie-lang/libjolie);
+- [jsdt-core](https://github.com/thesave/JSDT/releases) (from this repository, see the [release page](https://github.com/thesave/JSDT/releases)).
 
 ## Usage
 
 ### Example
 
-Generate the class interface `MyInterface` and its types from the `MyInterface.ol` file (e.g., [as found in the test folder](https://github.com/thesave/JSDT/tree/main/src/test/jolie)), using `src` as output destination.
+To generate the JavaService class from the `MyInterface`  interface and its types from the `MyInterface.ol` file (e.g., [as found in the test folder](https://github.com/thesave/JSDT/tree/main/src/test/jolie)), using `src` as output destination, issue the command:
 
 `java -jar jsdt-{version}.jar --compileTypes --dstDir=src MyInterface MyInterface.ol`
 
-To compile the generated Java sources with javac one can use the following command
+To compile the generated Java sources with javac use the command:
 
 `javac -jar -cp jolie-{jolie-version}.jar:libjolie-{jolie-version}.jar:jsdt-core-{version}.jar src/MyInterface/*`
 
