@@ -27,7 +27,7 @@ on:
       version:
         description: 'Version of the release'
         required: true
-        default: 'v.x.x'
+        default: 'x.x'
 
 jobs:
   release:
@@ -60,12 +60,22 @@ jobs:
         run: |
           ./gradlew jar
       
-      - name: Upload Release Asset
+      - name: Upload Release Asset Core
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: jsdt-core-${{ github.event.inputs.version }}.jar
+          asset_path: dist/jsdt-core-${{ github.event.inputs.version }}.jar
+          asset_name: jsdt-core-${{ github.event.inputs.version }}.jar
+          asset_content_type: application/zip
+          
+      - name: Upload Release Asset Application
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: dist/jsdt-${{ github.event.inputs.version }}.jar
           asset_name: jsdt-${{ github.event.inputs.version }}.jar
           asset_content_type: application/zip
