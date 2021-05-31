@@ -51,4 +51,4 @@ JavaService Development Tool
 
 - [ ] resolve type references
 - [ ] resolve imports 
-- [ ] accept any Jolie file as input
+- [ ] support the full Jolie syntax
