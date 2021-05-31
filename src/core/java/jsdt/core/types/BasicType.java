@@ -19,30 +19,42 @@
  * For details about the authors of this software, see the AUTHORS file.      *
  ******************************************************************************/
 
-package jsdt.JSDTVisitor;
+package jsdt.core.types;
 
-import com.github.javaparser.ast.CompilationUnit;
-import jsdt.grammar.JolieTypesLexer;
-import jsdt.grammar.JolieTypesParser;
-import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
+import jolie.runtime.Value;
 
-import java.lang.reflect.Type;
-import java.util.List;
+public class BasicType< T > {
+	final private T root;
 
-public class JSDTVisitor {
-
-	public static List< CompilationUnit > visitInterfaces( List< JolieTypesParser.InterfaceDeclarationContext > interfaces, String interfaceName, String packageName ){
-		return JSDTVisitorImplementation.generateInterfaceClass( interfaceName, packageName, interfaces );
+	public BasicType( T root ) {
+		this.root = root;
 	}
 
-	public static List< CompilationUnit > visitTypes( List< JolieTypesParser.TypeDeclarationContext > types, String typeName, String packageName ){
-		return JSDTVisitorImplementation.generateTypeClasses( typeName, packageName, types );
+	public T root() {
+		return root;
 	}
 
-	public static List< CompilationUnit > visit( List< JolieTypesParser.InterfaceDeclarationContext > interfaces, String interfaceName, String packageName, List< JolieTypesParser.TypeDeclarationContext > types ){
-		return JSDTVisitorImplementation.generateInterfaceAndTypeClasses( interfaceName, packageName, interfaces, types );
+	public static < R > BasicType< R > parse( Value v, Class< R > c ) {
+		if ( c.equals( Boolean.class ) )
+			return ( BasicType< R > ) new BasicType<>( v.boolValue() );
+		if ( c.equals( Integer.class ) )
+			return ( BasicType< R > ) new BasicType<>( v.intValue() );
+		if ( c.equals( Double.class ) )
+			return ( BasicType< R > ) new BasicType<>( v.doubleValue() );
+		if ( c.equals( Long.class ) )
+			return ( BasicType< R > ) new BasicType<>( v.longValue() );
+		if ( c.equals( String.class ) )
+			return ( BasicType< R > ) new BasicType<>( v.strValue() );
+		else
+			throw new RuntimeException( "Unsupported root value type " + c );
+	}
+
+	public Value toValue() {
+		Value value = Value.create();
+		if ( this.root() != null ) {
+			value.setValue( this.root() );
+		}
+		return value;
 	}
 
 }

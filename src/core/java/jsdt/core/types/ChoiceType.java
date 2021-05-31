@@ -19,43 +19,47 @@
  * For details about the authors of this software, see the AUTHORS file.      *
  ******************************************************************************/
 
-package jsdt.cardinality;
+package jsdt.core.types;
 
 import jolie.runtime.Value;
-import jolie.runtime.ValueVector;
-import jsdt.types.BasicType;
-import jsdt.types.ChoiceType;
 
-public class Single< T > extends Cardinality< T >{
+import java.util.Optional;
 
-	private Single( T value ) {
-		super( value );
+public class ChoiceType< L, R > {
+
+	private final L left;
+	private final R right;
+
+	public ChoiceType( L left, R right ) {
+		this.left = left;
+		this.right = right;
 	}
 
-	public static < R > Single< R > of( R value ){
-		if( value == null ){
-			throw new RuntimeException( "Expected single value, found none" );
-		} else {
-			return new Single<>( value );
-		}
+	public Optional< L > left() {
+		return Optional.ofNullable( left );
 	}
 
-	@Override
-	public void addChildenIfNotEmpty( String name, Value destination ) {
-		ValueVector values = ValueVector.create();
-		if ( this.get() instanceof Value ) {
-			values.add( ( Value ) this.get() );
-		} else {
-			if ( this.get() instanceof BasicType ) {
-				values.add( ( ( BasicType<?> ) this.get() ).toValue() );
-			} else if ( this.get() instanceof ChoiceType ) {
-				values.add( ( ( ChoiceType<?,?> ) this.get() ).toValue() );
+	public Optional< R > right() {
+		return Optional.ofNullable( right );
+	}
+
+	public Value toValue() {
+		if ( this.left().isPresent() ) {
+			if ( this.left().get() instanceof BasicType ) {
+				return ( ( BasicType< ? > ) this.left().get() ).toValue();
+			} else if ( this.left().get() instanceof ChoiceType ) {
+				return ( ( ChoiceType< ?, ? > ) this.left().get() ).toValue();
 			} else {
-				throw new RuntimeException( "Expected to find classes extending either BasicType or ChoiceType, found " + this.get().getClass() );
+				throw new RuntimeException( "Expected to find classes extending either BasicType or ChoiceType, found " + this.left().get().getClass() );
 			}
-		}
-		if( ! values.isEmpty() ){
-			destination.children().put( name, values );
+		} else {
+			if ( this.right().get() instanceof BasicType ) {
+				return ( ( BasicType< ? > ) this.right().get() ).toValue();
+			} else if ( this.right().get() instanceof ChoiceType ) {
+				return ( ( ChoiceType< ?, ? > ) this.right().get() ).toValue();
+			} else {
+				throw new RuntimeException( "Expected to find classes extending either BasicType or ChoiceType, found " + this.right().get().getClass() );
+			}
 		}
 	}
 

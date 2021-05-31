@@ -21,8 +21,8 @@
 
 package example;
 
-import jsdt.cardinality.Multi;
-import jsdt.types.BasicType;
+import jsdt.core.cardinality.Multi;
+import jsdt.core.types.BasicType;
 import jolie.runtime.Value;
 
 import java.util.stream.Collectors;
@@ -42,17 +42,17 @@ public class MyType_A_B_2 extends BasicType< Integer > {
 
 	public static MyType_A_B_2 parse( Value v ) {
 		if ( v != null && v.isInt() ) {
-				Multi< MyType_A_B_2_C > c = Multi.of(
-								v.getChildren( "c" ).stream()
-												.map( MyType_A_B_2_C::parse )
-												.collect( Collectors.toList() ) );
-				return new MyType_A_B_2( v.intValue(), c );
+			Multi< MyType_A_B_2_C > c = Multi.of(
+							v.getChildren( "c" ).stream()
+											.map( MyType_A_B_2_C::parse )
+											.collect( Collectors.toList() ) );
+			return new MyType_A_B_2( v.intValue(), c );
 		} else {
 			return null;
 		}
 	}
 
-	public Value toValue(){
+	public Value toValue() {
 		Value value = super.toValue();
 		this.c().addChildenIfNotEmpty( "c", value );
 		return value;

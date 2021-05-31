@@ -19,7 +19,9 @@
  * For details about the authors of this software, see the AUTHORS file.      *
  ******************************************************************************/
 
-package jsdt; import jsdt.JSDTVisitor.JSDTVisitor;
+package jsdt;
+
+import jsdt.JSDTVisitor.JSDTVisitor;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import jsdt.grammar.JolieTypesLexer;
@@ -86,28 +88,28 @@ public class JSDT implements Callable< Integer > {
 			CommonTokenStream tokens = new CommonTokenStream( lexer );
 			JolieTypesParser parser = new JolieTypesParser( tokens );
 			packageName = ( packageName == null ) ? symbolName : packageName;
-			List< CompilationUnit  > compilationUnits = null;
+			List< CompilationUnit > compilationUnits = null;
 			JolieTypesParser.TypesOrInterfacesContext ctx = parser.typesOrInterfaces();
-			if( targetIsType ){
+			if ( targetIsType ) {
 				compilationUnits = JSDTVisitor.visitTypes( ctx.typeDeclaration(), symbolName, packageName );
-			} else if( compileTypes ){
+			} else if ( compileTypes ) {
 				compilationUnits = JSDTVisitor.visit( ctx.interfaceDeclaration(), symbolName, packageName, ctx.typeDeclaration() );
 			} else {
 				compilationUnits = JSDTVisitor.visitInterfaces( ctx.interfaceDeclaration(), symbolName, packageName );
 			}
-			if( compilationUnits == null || compilationUnits.isEmpty() ){
+			if ( compilationUnits == null || compilationUnits.isEmpty() ) {
 				System.err.println( "No classes have been generated. Please, check the input file and the launch parameters." );
 			} else {
 				Path destinationPath = Path.of( dstDir ).resolve( packageName );
 				Files.createDirectories( destinationPath );
-				for( CompilationUnit cu : compilationUnits ){
-					if( cu.getTypes().size() > 1 ){
+				for ( CompilationUnit cu : compilationUnits ) {
+					if ( cu.getTypes().size() > 1 ) {
 						throw new RuntimeException( "There should be a 1:1 correspondence between compilationUnits and classes, found "
 										+ cu.getTypes().size() + ": "
 										+ cu.getTypes().stream().map( NodeWithSimpleName::getNameAsString ).collect( Collectors.joining( "," ) ) );
 					}
 					Path filePath = destinationPath.resolve( cu.getTypes().get( 0 ).getNameAsString() + ".java" );
-					if( filePath.toFile().exists() ){
+					if ( filePath.toFile().exists() ) {
 						filePath.toFile().delete();
 					}
 					Files.createFile( filePath );

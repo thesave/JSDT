@@ -21,7 +21,7 @@
 
 package example;
 
-import jsdt.types.BasicType;
+import jsdt.core.types.BasicType;
 import jolie.runtime.Value;
 
 public class MyType_A_B_2_C extends BasicType< Boolean > {
@@ -31,14 +31,14 @@ public class MyType_A_B_2_C extends BasicType< Boolean > {
 	}
 
 	public static MyType_A_B_2_C parse( Value v ) {
-		if ( v != null && v.isBool() ){
+		if ( v != null && v.isBool() ) {
 			return new MyType_A_B_2_C( v.boolValue() );
 		} else {
 			return null;
 		}
 	}
 
-	public Value toValue(){
+	public Value toValue() {
 		Value value = super.toValue();
 		return value;
 	}

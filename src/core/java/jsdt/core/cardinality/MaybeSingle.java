@@ -19,46 +19,49 @@
  * For details about the authors of this software, see the AUTHORS file.      *
  ******************************************************************************/
 
-package jsdt.cardinality;
+package jsdt.core.cardinality;
 
 import jolie.runtime.Value;
 import jolie.runtime.ValueVector;
-import jsdt.types.BasicType;
-import jsdt.types.ChoiceType;
+import jsdt.core.types.BasicType;
+import jsdt.core.types.ChoiceType;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-public class Multi< T > extends Cardinality< List< Optional< T > > > {
-
-	Multi( List< Optional< T > > value ) {
+// represents ? === [0,1]
+public class MaybeSingle< T > extends Cardinality< Optional< T > > {
+	private MaybeSingle( Optional< T > value ) {
 		super( value );
 	}
 
-	public static < R > Multi< R > of( List< R > values ) {
-		if ( values == null ) {
-			return new Multi<>( Collections.emptyList() );
-		} else {
-			return new Multi<>( values.stream().map( Optional::ofNullable ).collect( Collectors.toList() ) );
-		}
+	public static < T > MaybeSingle< T > of( T value ) {
+		return new MaybeSingle<>( Optional.ofNullable( value ) );
 	}
 
 	@Override
 	public void addChildenIfNotEmpty( String name, Value destination ) {
 		ValueVector values = ValueVector.create();
-		this.get().stream().filter( Optional::isPresent ).forEach( v -> {
-							if ( v.get() instanceof BasicType ) {
-								values.add( ( ( BasicType<?> ) v.get() ).toValue() );
-							} else if ( v.get() instanceof ChoiceType ) {
-								values.add( ( ( ChoiceType<?,?> ) v.get() ).toValue() );
-							} else {
-								throw new RuntimeException( "Expected to find classes extending either BasicType or ChoiceType, found " + v.getClass() );
-							}
-						}
-		);
-		if( ! values.isEmpty() ){
+		if ( this.get().isPresent() ) {
+			if ( this.get().get() instanceof Value ) {
+				values.add( ( Value ) this.get().get() );
+			} else {
+				if ( this.get().get() instanceof Value ) {
+					values.add( ( Value ) this.get().get() );
+				} else {
+					if ( this.get().get() instanceof BasicType ) {
+						values.add( ( ( BasicType< ? > ) this.get().get() ).toValue() );
+					} else if ( this.get().get() instanceof ChoiceType ) {
+						values.add( ( ( ChoiceType< ?, ? > ) this.get().get() ).toValue() );
+					} else {
+						throw new RuntimeException( "Expected to find classes extending either BasicType or ChoiceType, found " + this.get().get().getClass() );
+					}
+				}
+				if ( !values.isEmpty() ) {
+					destination.children().put( name, values );
+				}
+			}
+		}
+		if ( !values.isEmpty() ) {
 			destination.children().put( name, values );
 		}
 	}

@@ -21,7 +21,7 @@
 
 package jsdt.JSDTVisitor;
 
-import jsdt.cardinality.Cardinalities;
+import jsdt.core.cardinality.Cardinalities;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.*;
@@ -79,7 +79,7 @@ class JSDTVisitorImplementation implements JolieTypesVisitor< Void > {
 		jsdt.collectedInterfaceTypes.forEach( typeName -> {
 			types_ctx.stream().filter( td -> td.Identifier().getText().equals( symbolName ) )
 							.forEach( jsdt::visitTypeDeclaration );
-		});
+		} );
 		return jsdt.compilationUnits;
 	}
 
@@ -181,7 +181,7 @@ class JSDTVisitorImplementation implements JolieTypesVisitor< Void > {
 
 		if ( typeChoice == null ) {
 
-			compilationUnit.addImport( "jsdt.types.BasicType" );
+			compilationUnit.addImport( "jsdt.core.cardinality.BasicType" );
 			compilationUnit.addImport( "jolie.runtime.Value" );
 
 			String javaNativeType = jolieToJavaType( nativeType );
@@ -234,7 +234,7 @@ class JSDTVisitorImplementation implements JolieTypesVisitor< Void > {
 					visitSubNodes( node );
 
 					Cardinalities cardinalityClass = getCardinalityClass( node.cardinality() );
-					compilationUnit.addImport( "jsdt.cardinality." + cardinalityClass );
+					compilationUnit.addImport( "jsdt.core.cardinality." + cardinalityClass );
 					if ( cardinalityClass.equals( Cardinalities.Multi ) ) {
 						compilationUnit.addImport( "java.util.stream.Collectors" );
 					}
@@ -285,7 +285,7 @@ class JSDTVisitorImplementation implements JolieTypesVisitor< Void > {
 			// we create a compilation unit for the choice
 			// and then two compilation units for the left and right choice
 
-			compilationUnit.addImport( "jsdt.types.ChoiceType" );
+			compilationUnit.addImport( "jsdt.core.cardinality.ChoiceType" );
 			compilationUnit.addImport( "jolie.runtime.Value" );
 
 			String leftClassName = getLineage() + "_1";

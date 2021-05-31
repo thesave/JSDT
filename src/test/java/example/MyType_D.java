@@ -22,7 +22,8 @@
 package example;
 
 import jolie.runtime.Value;
-import jsdt.types.BasicType;
+import jsdt.core.types.BasicType;
+
 public class MyType_D extends BasicType< Integer > {
 
 	public MyType_D( Integer root ) {
@@ -30,14 +31,14 @@ public class MyType_D extends BasicType< Integer > {
 	}
 
 	public static MyType_D parse( Value v ) {
-		if ( v != null && v.isInt() ){
+		if ( v != null && v.isInt() ) {
 			return new MyType_D( v.intValue() );
 		} else {
 			return null;
 		}
 	}
 
-	public Value toValue(){
+	public Value toValue() {
 		Value value = super.toValue();
 		return value;
 	}

@@ -21,8 +21,9 @@
 
 package example;
 
-import jsdt.types.BasicType;
+import jsdt.core.types.BasicType;
 import jolie.runtime.Value;
+
 public class MyType_A_B_1 extends BasicType< String > {
 
 	public MyType_A_B_1( String root ) {

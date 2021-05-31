@@ -19,12 +19,11 @@
  * For details about the authors of this software, see the AUTHORS file.      *
  ******************************************************************************/
 
-package jsdt.cardinality;
+package jsdt.core.cardinality;
 
 import jolie.runtime.Value;
-import jolie.runtime.ValueVector;
 
-public abstract class Cardinality < T >{
+public abstract class Cardinality< T > {
 
 	private final T value;
 
@@ -32,7 +31,7 @@ public abstract class Cardinality < T >{
 		this.value = value;
 	}
 
-	public T get(){
+	public T get() {
 		return value;
 	}
 

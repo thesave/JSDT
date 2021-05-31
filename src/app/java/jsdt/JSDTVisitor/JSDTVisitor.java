@@ -19,48 +19,30 @@
  * For details about the authors of this software, see the AUTHORS file.      *
  ******************************************************************************/
 
-package jsdt.types;
+package jsdt.JSDTVisitor;
 
-import jolie.runtime.Value;
+import com.github.javaparser.ast.CompilationUnit;
+import jsdt.grammar.JolieTypesLexer;
+import jsdt.grammar.JolieTypesParser;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
 
-import java.util.Optional;
+import java.lang.reflect.Type;
+import java.util.List;
 
-public class ChoiceType< L , R > {
+public class JSDTVisitor {
 
-	private final L left;
-	private final R right;
-
-	public ChoiceType( L left, R right ) {
-		this.left = left;
-		this.right = right;
+	public static List< CompilationUnit > visitInterfaces( List< JolieTypesParser.InterfaceDeclarationContext > interfaces, String interfaceName, String packageName ) {
+		return JSDTVisitorImplementation.generateInterfaceClass( interfaceName, packageName, interfaces );
 	}
 
-	public Optional< L > left() {
-		return Optional.ofNullable( left );
+	public static List< CompilationUnit > visitTypes( List< JolieTypesParser.TypeDeclarationContext > types, String typeName, String packageName ) {
+		return JSDTVisitorImplementation.generateTypeClasses( typeName, packageName, types );
 	}
 
-	public Optional< R > right() {
-		return Optional.ofNullable( right );
-	}
-
-	public Value toValue(){
-		if( this.left().isPresent() ){
-			if( this.left().get() instanceof BasicType ){
-				return ( ( BasicType<?> ) this.left().get() ).toValue();
-			} else if ( this.left().get() instanceof ChoiceType ){
-				return ( ( ChoiceType<?,?> ) this.left().get() ).toValue();
-			} else {
-				throw new RuntimeException( "Expected to find classes extending either BasicType or ChoiceType, found " + this.left().get().getClass() );
-			}
-		} else {
-			if( this.right().get() instanceof BasicType ){
-				return ( ( BasicType<?> ) this.right().get() ).toValue();
-			} else if ( this.right().get() instanceof ChoiceType ){
-				return ( ( ChoiceType<?,?> ) this.right().get() ).toValue();
-			} else {
-				throw new RuntimeException( "Expected to find classes extending either BasicType or ChoiceType, found " + this.right().get().getClass() );
-			}
-		}
+	public static List< CompilationUnit > visit( List< JolieTypesParser.InterfaceDeclarationContext > interfaces, String interfaceName, String packageName, List< JolieTypesParser.TypeDeclarationContext > types ) {
+		return JSDTVisitorImplementation.generateInterfaceAndTypeClasses( interfaceName, packageName, interfaces, types );
 	}
 
 }

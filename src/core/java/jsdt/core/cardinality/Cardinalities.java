@@ -19,42 +19,12 @@
  * For details about the authors of this software, see the AUTHORS file.      *
  ******************************************************************************/
 
-package jsdt.types;
+package jsdt.core.cardinality;
 
-import jolie.runtime.Value;
+public enum Cardinalities {
 
-public class BasicType< T > {
-	final private T root;
-
-	public BasicType( T root ) {
-		this.root = root;
-	}
-
-	public T root() {
-		return root;
-	}
-
-	public static < R > BasicType< R > parse( Value v, Class< R > c ) {
-		if ( c.equals( Boolean.class ) )
-			return ( BasicType< R > ) new BasicType<>( v.boolValue() );
-		if ( c.equals( Integer.class ) )
-			return ( BasicType< R > ) new BasicType<>( v.intValue() );
-		if ( c.equals( Double.class ) )
-			return ( BasicType< R > ) new BasicType<>( v.doubleValue() );
-		if ( c.equals( Long.class ) )
-			return ( BasicType< R > ) new BasicType<>( v.longValue() );
-		if ( c.equals( String.class ) )
-			return ( BasicType< R > ) new BasicType<>( v.strValue() );
-		else
-			throw new RuntimeException( "Unsupported root value type " + c );
-	}
-
-	public Value toValue(){
-		Value value = Value.create();
-		if( this.root() != null ){
-			value.setValue( this.root() );
-		}
-		return value;
-	}
+	Single,
+	MaybeSingle,
+	Multi
 
 }

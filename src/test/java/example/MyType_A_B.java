@@ -21,7 +21,7 @@
 
 package example;
 
-import jsdt.types.ChoiceType;
+import jsdt.core.types.ChoiceType;
 import jolie.runtime.Value;
 
 public class MyType_A_B extends ChoiceType< MyType_A_B_1, MyType_A_B_2 > {

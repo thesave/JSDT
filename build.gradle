@@ -11,32 +11,44 @@ apply plugin: 'application'
 def libDir = file( "lib" )
 
 configurations {
-    jsdt {
-        extendsFrom implementation
-    }
+    core
+    app.extendsFrom core
 }
 
 dependencies {
     antlr "org.antlr:antlr4:4.9.2"
-    implementation 'com.github.javaparser:javaparser-core:3.22.1'
-    implementation 'info.picocli:picocli:4.6.1'
-    implementation fileTree( dir: libDir, include: '*.jar' )
+    app "org.antlr:antlr4:4.9.2"
+    app 'com.github.javaparser:javaparser-core:3.22.1'
+    app 'info.picocli:picocli:4.6.1'
+    core fileTree( dir: libDir, include: '*.jar' )
+
 }
 
-
-import org.apache.tools.ant.filters.ReplaceTokens
-
 sourceSets {
-    implementation {
-        java.srcDir 'src/main/java'
-        antlr.srcDir 'src/main/antlr'
+    core {
+        java.srcDir 'src/core/java'
+        compileClasspath += configurations.core
+    }
+    app {
+        antlr.srcDir 'src/app/antlr'
+        java.srcDir 'src/app/java'
+        runtimeClasspath += compileClasspath += configurations.core + configurations.app + configurations.antlr + sourceSets.core.output
     }
 }
 
+build {
+    dependsOn compileCoreJava
+    dependsOn compileAppJava
+}
+
 generateGrammarSource {
+    dependsOn generateAppGrammarSource
+}
+
+generateAppGrammarSource {
     description "Compilation of the Antlr jsdt.grammar to Java Sources"
-    outputDirectory file('src/main/java/jsdt/grammar')
-    arguments += ['-package', 'jsdt.grammar', "-visitor"]
+    outputDirectory file( 'src/app/java/jsdt/grammar' )
+    arguments += ['-package', 'jsdt.grammar', '-visitor']
 }
 
 def jarOutputFolder = "dist"
@@ -44,7 +56,7 @@ def jarOutputFolder = "dist"
 version "0.2"
 
 task setVersion {
-    File file = projectDir.toPath().resolve("src/main/resources/project.properties" ).toFile();
+    File file = projectDir.toPath().resolve("src/app/resources/project.properties" ).toFile();
     if( ! file.exists() ){
         file.createNewFile()
     }
@@ -52,11 +64,40 @@ task setVersion {
 }
 compileJava.dependsOn( setVersion )
 
-jar {
+task jarApplication( type: Jar ) {
     destinationDirectory = file( jarOutputFolder )
-    manifest.attributes 'Main-Class': 'jsdt.JSDT'
-    setDuplicatesStrategy( DuplicatesStrategy.WARN )
-    from {
-        configurations.jsdt.collect { it.isDirectory() ? it : zipTree(it) }
+    manifest {
+        attributes "Implementation-Title": "JSDT Application Implementation",
+                "Implementation-Version": project.version,
+                'Main-Class': 'jsdt.JSDT'
     }
+    setDuplicatesStrategy( DuplicatesStrategy.WARN )
+    from sourceSets.app.output
+    from sourceSets.core.output
+    println configurations.app.resolve().toArray()
+    from {
+        configurations.app.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    archiveBaseName.set( "jsdt" )
+}
+
+task jarCore( type: Jar ) {
+    manifest {
+        attributes "Implementation-Title": "JSDT core library",
+                "Implementation-Version": project.version
+    }
+    from sourceSets.core.output
+    destinationDirectory = file( jarOutputFolder )
+    setDuplicatesStrategy( DuplicatesStrategy.WARN )
+    archiveBaseName.set( "jsdt-core" )
+}
+
+jar {
+    enabled = false // this avoids creating an empty "project" jar file
+    finalizedBy jarCore
+    finalizedBy jarApplication
+}
+
+clean.doFirst{
+    delete jarOutputFolder
 }

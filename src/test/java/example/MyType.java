@@ -21,10 +21,9 @@
 
 package example;
 
-import jolie.runtime.ValueVector;
-import jsdt.cardinality.Multi;
-import jsdt.cardinality.Single;
-import jsdt.types.BasicType;
+import jsdt.core.cardinality.Multi;
+import jsdt.core.cardinality.Single;
+import jsdt.core.types.BasicType;
 import jolie.runtime.Value;
 
 import java.util.stream.Collectors;
@@ -60,8 +59,8 @@ public class MyType extends BasicType< Void > {
 	}
 
 	public static MyType parse( Value v ) {
-		if( v != null ){
-			Multi< MyType_A > a = Multi.of( v.getChildren( "a" ).stream().map( MyType_A::parse ).collect( Collectors.toList()) );
+		if ( v != null ) {
+			Multi< MyType_A > a = Multi.of( v.getChildren( "a" ).stream().map( MyType_A::parse ).collect( Collectors.toList() ) );
 			Single< MyType_D > d = Single.of( MyType_D.parse( v.getChildren( "d" ).get( 0 ) ) );
 			return new MyType( a, d );
 		} else {
@@ -69,7 +68,7 @@ public class MyType extends BasicType< Void > {
 		}
 	}
 
-	public Value toValue(){
+	public Value toValue() {
 		Value value = super.toValue();
 		this.a().addChildenIfNotEmpty( "a", value );
 		this.d().addChildenIfNotEmpty( "d", value );

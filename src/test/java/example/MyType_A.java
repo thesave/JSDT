@@ -21,9 +21,9 @@
 
 package example;
 
-import jsdt.types.BasicType;
+import jsdt.core.types.BasicType;
 import jolie.runtime.Value;
-import jsdt.cardinality.MaybeSingle;
+import jsdt.core.cardinality.MaybeSingle;
 
 public class MyType_A extends BasicType< String > {
 
@@ -39,7 +39,7 @@ public class MyType_A extends BasicType< String > {
 	}
 
 	public static MyType_A parse( Value v ) {
-		if( v != null && v.isString() ){
+		if ( v != null && v.isString() ) {
 			MaybeSingle< MyType_A_B > b = MaybeSingle.of( MyType_A_B.parse( v.getChildren( "b" ).get( 0 ) ) );
 			return new MyType_A( v.strValue(), b );
 		} else {
@@ -47,7 +47,7 @@ public class MyType_A extends BasicType< String > {
 		}
 	}
 
-	public Value toValue(){
+	public Value toValue() {
 		Value value = super.toValue();
 		this.b().addChildenIfNotEmpty( "b", value );
 		return value;
