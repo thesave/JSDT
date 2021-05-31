@@ -181,7 +181,7 @@ class JSDTVisitorImplementation implements JolieTypesVisitor< Void > {
 
 		if ( typeChoice == null ) {
 
-			compilationUnit.addImport( "jsdt.core.cardinality.BasicType" );
+			compilationUnit.addImport( "jsdt.core.types.BasicType" );
 			compilationUnit.addImport( "jolie.runtime.Value" );
 
 			String javaNativeType = jolieToJavaType( nativeType );
@@ -285,7 +285,7 @@ class JSDTVisitorImplementation implements JolieTypesVisitor< Void > {
 			// we create a compilation unit for the choice
 			// and then two compilation units for the left and right choice
 
-			compilationUnit.addImport( "jsdt.core.cardinality.ChoiceType" );
+			compilationUnit.addImport( "jsdt.core.types.ChoiceType" );
 			compilationUnit.addImport( "jolie.runtime.Value" );
 
 			String leftClassName = getLineage() + "_1";
