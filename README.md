@@ -22,6 +22,7 @@ The generated code has the following dependencies:
 
 - [jolie](https://mvnrepository.com/artifact/org.jolie-lang/jolie);
 - [libjolie](https://mvnrepository.com/artifact/org.jolie-lang/libjolie);
+- [jolie-cli](https://mvnrepository.com/artifact/org.jolie-lang/jolie-cli);
 - [jsdt-core](https://github.com/thesave/JSDT/releases) (from this repository, see the [release page](https://github.com/thesave/JSDT/releases)).
 
 ## Usage
