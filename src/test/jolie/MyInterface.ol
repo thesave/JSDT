@@ -1,6 +1,6 @@
 interface MyInterface {
-	oneWay: ow_1( string ) ow_2( MyType )
-	requestResponse: rr_1( string )( void ) rr_2( MyOtherType )( string )
+	oneWay: ow_1( string ), ow_2( MyType )
+	requestResponse: rr_1( string )( void ), rr_2( MyOtherType )( string )
 }
 
 type MyType: void {

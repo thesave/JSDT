@@ -81,7 +81,7 @@ public class JSDT implements Callable< Integer > {
 
 	@Override
 	public Integer call() {
-		CharStream cs = null;
+		CharStream cs;
 		try {
 			cs = CharStreams.fromPath( file.toPath() );
 			JolieTypesLexer lexer = new JolieTypesLexer( cs );

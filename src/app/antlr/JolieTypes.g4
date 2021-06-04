@@ -25,8 +25,8 @@ typesOrInterfaces: ( typeDeclaration | interfaceDeclaration )+
 	;
 
 interfaceDeclaration: ( 'interface' | 'Interface' ) Identifier '{'
-	( ( 'oneWay' | 'OneWay' ) ':' oneWays* )?
-  ( ( 'requestResponse' | 'RequestResponse' ) ':' requestResponses* )?
+	( ( 'oneWay' | 'OneWay' ) ':' oneWays (',' oneWays)* )?
+  ( ( 'requestResponse' | 'RequestResponse' ) ':' requestResponses (',' requestResponses)* )?
 	 '}'
 	;
 

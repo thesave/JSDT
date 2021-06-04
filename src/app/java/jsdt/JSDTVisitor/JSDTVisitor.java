@@ -22,13 +22,8 @@
 package jsdt.JSDTVisitor;
 
 import com.github.javaparser.ast.CompilationUnit;
-import jsdt.grammar.JolieTypesLexer;
 import jsdt.grammar.JolieTypesParser;
-import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
 
-import java.lang.reflect.Type;
 import java.util.List;
 
 public class JSDTVisitor {

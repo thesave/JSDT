@@ -39,9 +39,9 @@ public class JolieTypesParser extends Parser {
 	private static String[] makeLiteralNames() {
 		return new String[] {
 			null, "'interface'", "'Interface'", "'{'", "'oneWay'", "'OneWay'", "':'", 
-			"'requestResponse'", "'RequestResponse'", "'}'", "'('", "')'", "'throws'", 
-			"','", "'type'", "'void'", "'bool'", "'int'", "'long'", "'string'", "'byte'", 
-			"'any'", "'undefined'", "'.'", "'|'"
+			"','", "'requestResponse'", "'RequestResponse'", "'}'", "'('", "')'", 
+			"'throws'", "'type'", "'void'", "'bool'", "'int'", "'long'", "'string'", 
+			"'byte'", "'any'", "'undefined'", "'.'", "'|'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
@@ -239,7 +239,7 @@ public class JolieTypesParser extends Parser {
 			match(Identifier);
 			setState(32);
 			match(T__2);
-			setState(41);
+			setState(43);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__3 || _la==T__4) {
@@ -256,31 +256,35 @@ public class JolieTypesParser extends Parser {
 				}
 				setState(34);
 				match(T__5);
-				setState(38);
+				setState(35);
+				oneWays();
+				setState(40);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				while (_la==Identifier) {
+				while (_la==T__6) {
 					{
 					{
-					setState(35);
+					setState(36);
+					match(T__6);
+					setState(37);
 					oneWays();
 					}
 					}
-					setState(40);
+					setState(42);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
 				}
 			}
 
-			setState(51);
+			setState(55);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			if (_la==T__6 || _la==T__7) {
+			if (_la==T__7 || _la==T__8) {
 				{
-				setState(43);
+				setState(45);
 				_la = _input.LA(1);
-				if ( !(_la==T__6 || _la==T__7) ) {
+				if ( !(_la==T__7 || _la==T__8) ) {
 				_errHandler.recoverInline(this);
 				}
 				else {
@@ -288,27 +292,31 @@ public class JolieTypesParser extends Parser {
 					_errHandler.reportMatch(this);
 					consume();
 				}
-				setState(44);
+				setState(46);
 				match(T__5);
-				setState(48);
+				setState(47);
+				requestResponses();
+				setState(52);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				while (_la==Identifier) {
+				while (_la==T__6) {
 					{
 					{
-					setState(45);
+					setState(48);
+					match(T__6);
+					setState(49);
 					requestResponses();
 					}
 					}
-					setState(50);
+					setState(54);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
 				}
 			}
 
-			setState(53);
-			match(T__8);
+			setState(57);
+			match(T__9);
 			}
 		}
 		catch (RecognitionException re) {
@@ -354,14 +362,14 @@ public class JolieTypesParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(55);
+			setState(59);
 			((OneWaysContext)_localctx).operation = match(Identifier);
-			setState(56);
-			match(T__9);
-			setState(57);
-			((OneWaysContext)_localctx).oneWayType = identifierOrNativeType();
-			setState(58);
+			setState(60);
 			match(T__10);
+			setState(61);
+			((OneWaysContext)_localctx).oneWayType = identifierOrNativeType();
+			setState(62);
+			match(T__11);
 			}
 		}
 		catch (RecognitionException re) {
@@ -415,28 +423,28 @@ public class JolieTypesParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(60);
-			((RequestResponsesContext)_localctx).operation = match(Identifier);
-			setState(61);
-			match(T__9);
-			setState(62);
-			((RequestResponsesContext)_localctx).requestType = identifierOrNativeType();
-			setState(63);
-			match(T__10);
 			setState(64);
-			match(T__9);
+			((RequestResponsesContext)_localctx).operation = match(Identifier);
 			setState(65);
-			((RequestResponsesContext)_localctx).responseType = identifierOrNativeType();
+			match(T__10);
 			setState(66);
+			((RequestResponsesContext)_localctx).requestType = identifierOrNativeType();
+			setState(67);
+			match(T__11);
+			setState(68);
 			match(T__10);
 			setState(69);
+			((RequestResponsesContext)_localctx).responseType = identifierOrNativeType();
+			setState(70);
+			match(T__11);
+			setState(73);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			if (_la==T__11) {
+			if (_la==T__12) {
 				{
-				setState(67);
-				match(T__11);
-				setState(68);
+				setState(71);
+				match(T__12);
+				setState(72);
 				throwTypeList();
 				}
 			}
@@ -483,24 +491,23 @@ public class JolieTypesParser extends Parser {
 	public final ThrowTypeListContext throwTypeList() throws RecognitionException {
 		ThrowTypeListContext _localctx = new ThrowTypeListContext(_ctx, getState());
 		enterRule(_localctx, 8, RULE_throwTypeList);
-		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(71);
+			setState(75);
 			identifierOrNativeType();
-			setState(74);
+			setState(78);
 			_errHandler.sync(this);
-			_la = _input.LA(1);
-			if (_la==T__12) {
+			switch ( getInterpreter().adaptivePredict(_input,7,_ctx) ) {
+			case 1:
 				{
-				setState(72);
-				match(T__12);
-				setState(73);
+				setState(76);
+				match(T__6);
+				setState(77);
 				throwTypeList();
 				}
+				break;
 			}
-
 			}
 		}
 		catch (RecognitionException re) {
@@ -544,12 +551,12 @@ public class JolieTypesParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(78);
+			setState(82);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case Identifier:
 				{
-				setState(76);
+				setState(80);
 				match(Identifier);
 				}
 				break;
@@ -562,7 +569,7 @@ public class JolieTypesParser extends Parser {
 			case T__20:
 			case T__21:
 				{
-				setState(77);
+				setState(81);
 				nativeType();
 				}
 				break;
@@ -619,30 +626,30 @@ public class JolieTypesParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(80);
+			setState(84);
 			match(T__13);
-			setState(81);
-			match(Identifier);
-			setState(82);
-			match(T__5);
-			setState(83);
-			nativeType();
 			setState(85);
+			match(Identifier);
+			setState(86);
+			match(T__5);
+			setState(87);
+			nativeType();
+			setState(89);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__2) {
 				{
-				setState(84);
+				setState(88);
 				nodes();
 				}
 			}
 
-			setState(88);
+			setState(92);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__23) {
 				{
-				setState(87);
+				setState(91);
 				typeChoice();
 				}
 			}
@@ -687,7 +694,7 @@ public class JolieTypesParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(90);
+			setState(94);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__14) | (1L << T__15) | (1L << T__16) | (1L << T__17) | (1L << T__18) | (1L << T__19) | (1L << T__20) | (1L << T__21))) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -743,24 +750,24 @@ public class JolieTypesParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(92);
+			setState(96);
 			match(T__2);
-			setState(94); 
+			setState(98); 
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			do {
 				{
 				{
-				setState(93);
+				setState(97);
 				subNodes();
 				}
 				}
-				setState(96); 
+				setState(100); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			} while ( _la==T__22 || _la==Identifier );
-			setState(98);
-			match(T__8);
+			setState(102);
+			match(T__9);
 			}
 		}
 		catch (RecognitionException re) {
@@ -814,48 +821,48 @@ public class JolieTypesParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(101);
+			setState(105);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__22) {
 				{
-				setState(100);
+				setState(104);
 				match(T__22);
 				}
 			}
 
-			setState(103);
+			setState(107);
 			match(Identifier);
-			setState(105);
+			setState(109);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << Single) | (1L << MaybeSingle) | (1L << Multi))) != 0)) {
 				{
-				setState(104);
+				setState(108);
 				cardinality();
 				}
 			}
 
-			setState(107);
+			setState(111);
 			match(T__5);
-			setState(108);
+			setState(112);
 			nativeType();
-			setState(110);
+			setState(114);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__2) {
 				{
-				setState(109);
+				setState(113);
 				nodes();
 				}
 			}
 
-			setState(113);
+			setState(117);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__23) {
 				{
-				setState(112);
+				setState(116);
 				typeChoice();
 				}
 			}
@@ -909,26 +916,26 @@ public class JolieTypesParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(115);
+			setState(119);
 			match(T__23);
-			setState(116);
+			setState(120);
 			nativeType();
-			setState(118);
+			setState(122);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__2) {
 				{
-				setState(117);
+				setState(121);
 				nodes();
 				}
 			}
 
-			setState(121);
+			setState(125);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__23) {
 				{
-				setState(120);
+				setState(124);
 				typeChoice();
 				}
 			}
@@ -976,7 +983,7 @@ public class JolieTypesParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(123);
+			setState(127);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << Single) | (1L << MaybeSingle) | (1L << Multi))) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -1000,38 +1007,39 @@ public class JolieTypesParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\"\u0080\4\2\t\2\4"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\"\u0084\4\2\t\2\4"+
 		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
 		"\13\4\f\t\f\4\r\t\r\3\2\3\2\6\2\35\n\2\r\2\16\2\36\3\3\3\3\3\3\3\3\3\3"+
-		"\3\3\7\3\'\n\3\f\3\16\3*\13\3\5\3,\n\3\3\3\3\3\3\3\7\3\61\n\3\f\3\16\3"+
-		"\64\13\3\5\3\66\n\3\3\3\3\3\3\4\3\4\3\4\3\4\3\4\3\5\3\5\3\5\3\5\3\5\3"+
-		"\5\3\5\3\5\3\5\5\5H\n\5\3\6\3\6\3\6\5\6M\n\6\3\7\3\7\5\7Q\n\7\3\b\3\b"+
-		"\3\b\3\b\3\b\5\bX\n\b\3\b\5\b[\n\b\3\t\3\t\3\n\3\n\6\na\n\n\r\n\16\nb"+
-		"\3\n\3\n\3\13\5\13h\n\13\3\13\3\13\5\13l\n\13\3\13\3\13\3\13\5\13q\n\13"+
-		"\3\13\5\13t\n\13\3\f\3\f\3\f\5\fy\n\f\3\f\5\f|\n\f\3\r\3\r\3\r\2\2\16"+
-		"\2\4\6\b\n\f\16\20\22\24\26\30\2\7\3\2\3\4\3\2\6\7\3\2\t\n\3\2\21\30\3"+
-		"\2\33\35\2\u0085\2\34\3\2\2\2\4 \3\2\2\2\69\3\2\2\2\b>\3\2\2\2\nI\3\2"+
-		"\2\2\fP\3\2\2\2\16R\3\2\2\2\20\\\3\2\2\2\22^\3\2\2\2\24g\3\2\2\2\26u\3"+
-		"\2\2\2\30}\3\2\2\2\32\35\5\16\b\2\33\35\5\4\3\2\34\32\3\2\2\2\34\33\3"+
-		"\2\2\2\35\36\3\2\2\2\36\34\3\2\2\2\36\37\3\2\2\2\37\3\3\2\2\2 !\t\2\2"+
-		"\2!\"\7\37\2\2\"+\7\5\2\2#$\t\3\2\2$(\7\b\2\2%\'\5\6\4\2&%\3\2\2\2\'*"+
-		"\3\2\2\2(&\3\2\2\2()\3\2\2\2),\3\2\2\2*(\3\2\2\2+#\3\2\2\2+,\3\2\2\2,"+
-		"\65\3\2\2\2-.\t\4\2\2.\62\7\b\2\2/\61\5\b\5\2\60/\3\2\2\2\61\64\3\2\2"+
-		"\2\62\60\3\2\2\2\62\63\3\2\2\2\63\66\3\2\2\2\64\62\3\2\2\2\65-\3\2\2\2"+
-		"\65\66\3\2\2\2\66\67\3\2\2\2\678\7\13\2\28\5\3\2\2\29:\7\37\2\2:;\7\f"+
-		"\2\2;<\5\f\7\2<=\7\r\2\2=\7\3\2\2\2>?\7\37\2\2?@\7\f\2\2@A\5\f\7\2AB\7"+
-		"\r\2\2BC\7\f\2\2CD\5\f\7\2DG\7\r\2\2EF\7\16\2\2FH\5\n\6\2GE\3\2\2\2GH"+
-		"\3\2\2\2H\t\3\2\2\2IL\5\f\7\2JK\7\17\2\2KM\5\n\6\2LJ\3\2\2\2LM\3\2\2\2"+
-		"M\13\3\2\2\2NQ\7\37\2\2OQ\5\20\t\2PN\3\2\2\2PO\3\2\2\2Q\r\3\2\2\2RS\7"+
-		"\20\2\2ST\7\37\2\2TU\7\b\2\2UW\5\20\t\2VX\5\22\n\2WV\3\2\2\2WX\3\2\2\2"+
-		"XZ\3\2\2\2Y[\5\26\f\2ZY\3\2\2\2Z[\3\2\2\2[\17\3\2\2\2\\]\t\5\2\2]\21\3"+
-		"\2\2\2^`\7\5\2\2_a\5\24\13\2`_\3\2\2\2ab\3\2\2\2b`\3\2\2\2bc\3\2\2\2c"+
-		"d\3\2\2\2de\7\13\2\2e\23\3\2\2\2fh\7\31\2\2gf\3\2\2\2gh\3\2\2\2hi\3\2"+
-		"\2\2ik\7\37\2\2jl\5\30\r\2kj\3\2\2\2kl\3\2\2\2lm\3\2\2\2mn\7\b\2\2np\5"+
-		"\20\t\2oq\5\22\n\2po\3\2\2\2pq\3\2\2\2qs\3\2\2\2rt\5\26\f\2sr\3\2\2\2"+
-		"st\3\2\2\2t\25\3\2\2\2uv\7\32\2\2vx\5\20\t\2wy\5\22\n\2xw\3\2\2\2xy\3"+
-		"\2\2\2y{\3\2\2\2z|\5\26\f\2{z\3\2\2\2{|\3\2\2\2|\27\3\2\2\2}~\t\6\2\2"+
-		"~\31\3\2\2\2\24\34\36(+\62\65GLPWZbgkpsx{";
+		"\3\3\3\3\3\3\7\3)\n\3\f\3\16\3,\13\3\5\3.\n\3\3\3\3\3\3\3\3\3\3\3\7\3"+
+		"\65\n\3\f\3\16\38\13\3\5\3:\n\3\3\3\3\3\3\4\3\4\3\4\3\4\3\4\3\5\3\5\3"+
+		"\5\3\5\3\5\3\5\3\5\3\5\3\5\5\5L\n\5\3\6\3\6\3\6\5\6Q\n\6\3\7\3\7\5\7U"+
+		"\n\7\3\b\3\b\3\b\3\b\3\b\5\b\\\n\b\3\b\5\b_\n\b\3\t\3\t\3\n\3\n\6\ne\n"+
+		"\n\r\n\16\nf\3\n\3\n\3\13\5\13l\n\13\3\13\3\13\5\13p\n\13\3\13\3\13\3"+
+		"\13\5\13u\n\13\3\13\5\13x\n\13\3\f\3\f\3\f\5\f}\n\f\3\f\5\f\u0080\n\f"+
+		"\3\r\3\r\3\r\2\2\16\2\4\6\b\n\f\16\20\22\24\26\30\2\7\3\2\3\4\3\2\6\7"+
+		"\3\2\n\13\3\2\21\30\3\2\33\35\2\u0089\2\34\3\2\2\2\4 \3\2\2\2\6=\3\2\2"+
+		"\2\bB\3\2\2\2\nM\3\2\2\2\fT\3\2\2\2\16V\3\2\2\2\20`\3\2\2\2\22b\3\2\2"+
+		"\2\24k\3\2\2\2\26y\3\2\2\2\30\u0081\3\2\2\2\32\35\5\16\b\2\33\35\5\4\3"+
+		"\2\34\32\3\2\2\2\34\33\3\2\2\2\35\36\3\2\2\2\36\34\3\2\2\2\36\37\3\2\2"+
+		"\2\37\3\3\2\2\2 !\t\2\2\2!\"\7\37\2\2\"-\7\5\2\2#$\t\3\2\2$%\7\b\2\2%"+
+		"*\5\6\4\2&\'\7\t\2\2\')\5\6\4\2(&\3\2\2\2),\3\2\2\2*(\3\2\2\2*+\3\2\2"+
+		"\2+.\3\2\2\2,*\3\2\2\2-#\3\2\2\2-.\3\2\2\2.9\3\2\2\2/\60\t\4\2\2\60\61"+
+		"\7\b\2\2\61\66\5\b\5\2\62\63\7\t\2\2\63\65\5\b\5\2\64\62\3\2\2\2\658\3"+
+		"\2\2\2\66\64\3\2\2\2\66\67\3\2\2\2\67:\3\2\2\28\66\3\2\2\29/\3\2\2\29"+
+		":\3\2\2\2:;\3\2\2\2;<\7\f\2\2<\5\3\2\2\2=>\7\37\2\2>?\7\r\2\2?@\5\f\7"+
+		"\2@A\7\16\2\2A\7\3\2\2\2BC\7\37\2\2CD\7\r\2\2DE\5\f\7\2EF\7\16\2\2FG\7"+
+		"\r\2\2GH\5\f\7\2HK\7\16\2\2IJ\7\17\2\2JL\5\n\6\2KI\3\2\2\2KL\3\2\2\2L"+
+		"\t\3\2\2\2MP\5\f\7\2NO\7\t\2\2OQ\5\n\6\2PN\3\2\2\2PQ\3\2\2\2Q\13\3\2\2"+
+		"\2RU\7\37\2\2SU\5\20\t\2TR\3\2\2\2TS\3\2\2\2U\r\3\2\2\2VW\7\20\2\2WX\7"+
+		"\37\2\2XY\7\b\2\2Y[\5\20\t\2Z\\\5\22\n\2[Z\3\2\2\2[\\\3\2\2\2\\^\3\2\2"+
+		"\2]_\5\26\f\2^]\3\2\2\2^_\3\2\2\2_\17\3\2\2\2`a\t\5\2\2a\21\3\2\2\2bd"+
+		"\7\5\2\2ce\5\24\13\2dc\3\2\2\2ef\3\2\2\2fd\3\2\2\2fg\3\2\2\2gh\3\2\2\2"+
+		"hi\7\f\2\2i\23\3\2\2\2jl\7\31\2\2kj\3\2\2\2kl\3\2\2\2lm\3\2\2\2mo\7\37"+
+		"\2\2np\5\30\r\2on\3\2\2\2op\3\2\2\2pq\3\2\2\2qr\7\b\2\2rt\5\20\t\2su\5"+
+		"\22\n\2ts\3\2\2\2tu\3\2\2\2uw\3\2\2\2vx\5\26\f\2wv\3\2\2\2wx\3\2\2\2x"+
+		"\25\3\2\2\2yz\7\32\2\2z|\5\20\t\2{}\5\22\n\2|{\3\2\2\2|}\3\2\2\2}\177"+
+		"\3\2\2\2~\u0080\5\26\f\2\177~\3\2\2\2\177\u0080\3\2\2\2\u0080\27\3\2\2"+
+		"\2\u0081\u0082\t\6\2\2\u0082\31\3\2\2\2\24\34\36*-\669KPT[^fkotw|\177";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

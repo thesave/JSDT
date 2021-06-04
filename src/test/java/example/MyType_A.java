@@ -21,9 +21,9 @@
 
 package example;
 
-import jsdt.core.types.BasicType;
 import jolie.runtime.Value;
 import jsdt.core.cardinality.MaybeSingle;
+import jsdt.core.types.BasicType;
 
 public class MyType_A extends BasicType< String > {
 

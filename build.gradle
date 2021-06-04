@@ -13,6 +13,7 @@ def libDir = file( "lib" )
 configurations {
     core
     app.extendsFrom core
+    testImplementation.extendsFrom app
 }
 
 dependencies {
@@ -33,6 +34,9 @@ sourceSets {
         antlr.srcDir 'src/app/antlr'
         java.srcDir 'src/app/java'
         runtimeClasspath += compileClasspath += configurations.core + configurations.app + configurations.antlr + sourceSets.core.output
+    }
+    test {
+        runtimeClasspath += compileClasspath += configurations.core + configurations.app + sourceSets.core.output
     }
 }
 
