@@ -65,7 +65,7 @@ public class Test {
 		debugInfo( v );
 
 		// PARSE INTO TYPED VALUE
-		MyType typedValue = MyType.parse( v );
+		MyInterface.MyType typedValue = MyInterface.MyType.parse( v );
 
 		typedValue.a().get().stream()
 						.filter( Optional::isPresent )

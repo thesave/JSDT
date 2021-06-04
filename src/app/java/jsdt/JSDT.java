@@ -21,14 +21,20 @@
 
 package jsdt;
 
-import jsdt.JSDTVisitor.JSDTVisitor;
+import jolie.Interpreter;
+import jolie.cli.CommandLineException;
+import jolie.cli.CommandLineParser;
+import jolie.lang.CodeCheckingException;
+import jolie.lang.parse.ParserException;
+import jolie.lang.parse.SemanticVerifier;
+import jolie.lang.parse.ast.InterfaceDefinition;
+import jolie.lang.parse.ast.Program;
+import jolie.lang.parse.ast.types.TypeDefinition;
+import jolie.lang.parse.module.ModuleException;
+import jolie.lang.parse.util.ParsingUtils;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
-import jsdt.grammar.JolieTypesLexer;
-import jsdt.grammar.JolieTypesParser;
-import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
+import jsdt.JSDTVisitor.JSDTVisitor;
 import picocli.CommandLine;
 
 import java.io.File;
@@ -37,6 +43,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.Callable;
@@ -81,43 +88,66 @@ public class JSDT implements Callable< Integer > {
 
 	@Override
 	public Integer call() {
-		CharStream cs;
 		try {
-			cs = CharStreams.fromPath( file.toPath() );
-			JolieTypesLexer lexer = new JolieTypesLexer( cs );
-			CommonTokenStream tokens = new CommonTokenStream( lexer );
-			JolieTypesParser parser = new JolieTypesParser( tokens );
+			String[] arguments = { file.toPath().toString() };
+			Interpreter.Configuration interpreterConfiguration =
+							new CommandLineParser( arguments, JSDT.class.getClassLoader() ).getInterpreterConfiguration();
+			SemanticVerifier.Configuration configuration =
+							new SemanticVerifier.Configuration( interpreterConfiguration.executionTarget() );
+			configuration.setCheckForMain( false );
+			final InputStream sourceIs;
+			sourceIs = interpreterConfiguration.inputStream();
+			Program program = ParsingUtils.parseProgram(
+							sourceIs,
+							interpreterConfiguration.programFilepath().toURI(),
+							interpreterConfiguration.charset(),
+							new String[ 0 ], // includesPath
+							new String[ 0 ], // packagePath
+							interpreterConfiguration.jolieClassLoader(),
+							interpreterConfiguration.constants(),
+							configuration,
+							true );
+
 			packageName = ( packageName == null ) ? symbolName : packageName;
-			List< CompilationUnit > compilationUnits = null;
-			JolieTypesParser.TypesOrInterfacesContext ctx = parser.typesOrInterfaces();
+			final List< CompilationUnit > compilationUnits = new LinkedList<>();
 			if ( targetIsType ) {
-				compilationUnits = JSDTVisitor.visitTypes( ctx.typeDeclaration(), symbolName, packageName );
-			} else if ( compileTypes ) {
-				compilationUnits = JSDTVisitor.visit( ctx.interfaceDeclaration(), symbolName, packageName, ctx.typeDeclaration() );
+				program.children().stream()
+								.filter( c -> c instanceof TypeDefinition && ( ( TypeDefinition ) c ).name().equals( symbolName ) )
+								.findAny().ifPresent( node -> {
+					compilationUnits.addAll( JSDTVisitor.generateTypeClasses( ( TypeDefinition ) node, packageName ) );
+				} );
 			} else {
-				compilationUnits = JSDTVisitor.visitInterfaces( ctx.interfaceDeclaration(), symbolName, packageName );
-			}
-			if ( compilationUnits == null || compilationUnits.isEmpty() ) {
-				System.err.println( "No classes have been generated. Please, check the input file and the launch parameters." );
-			} else {
-				Path destinationPath = Path.of( dstDir ).resolve( packageName );
-				Files.createDirectories( destinationPath );
-				for ( CompilationUnit cu : compilationUnits ) {
-					if ( cu.getTypes().size() > 1 ) {
-						throw new RuntimeException( "There should be a 1:1 correspondence between compilationUnits and classes, found "
-										+ cu.getTypes().size() + ": "
-										+ cu.getTypes().stream().map( NodeWithSimpleName::getNameAsString ).collect( Collectors.joining( "," ) ) );
+				program.children().stream()
+								.filter( c -> c instanceof InterfaceDefinition && ( ( InterfaceDefinition ) c ).name().equals( symbolName ) )
+								.findAny().ifPresent( node -> {
+									compilationUnits.addAll( compileTypes ?
+													JSDTVisitor.generateInterfaceAndTypeClasses( ( InterfaceDefinition ) node, packageName )
+													: JSDTVisitor.generateInterfaceClass( ( InterfaceDefinition ) node, packageName )
+									);
+								}
+				);
+				if ( compilationUnits.isEmpty() ) {
+					System.err.println( "No classes have been generated. Please, check the input file and the launch parameters." );
+				} else {
+					Path destinationPath = Path.of( dstDir ).resolve( packageName );
+					Files.createDirectories( destinationPath );
+					for ( CompilationUnit cu : compilationUnits ) {
+						if ( cu.getTypes().size() > 1 ) {
+							throw new RuntimeException( "There should be a 1:1 correspondence between compilationUnits and classes, found "
+											+ cu.getTypes().size() + ": "
+											+ cu.getTypes().stream().map( NodeWithSimpleName::getNameAsString ).collect( Collectors.joining( "," ) ) );
+						}
+						Path filePath = destinationPath.resolve( cu.getTypes().get( 0 ).getNameAsString() + ".java" );
+						if ( filePath.toFile().exists() ) {
+							filePath.toFile().delete();
+						}
+						Files.createFile( filePath );
+						Files.writeString( filePath, cu.toString(), StandardOpenOption.WRITE );
 					}
-					Path filePath = destinationPath.resolve( cu.getTypes().get( 0 ).getNameAsString() + ".java" );
-					if ( filePath.toFile().exists() ) {
-						filePath.toFile().delete();
-					}
-					Files.createFile( filePath );
-					Files.writeString( filePath, cu.toString(), StandardOpenOption.WRITE );
 				}
 			}
 			return 0;
-		} catch ( IOException e ) {
+		} catch ( ModuleException | CodeCheckingException | ParserException | IOException | CommandLineException e ) {
 			e.printStackTrace();
 			return 1;
 		}

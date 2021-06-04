@@ -5,7 +5,6 @@ repositories {
 }
 
 apply plugin: 'java'
-apply plugin: 'antlr'
 apply plugin: 'application'
 
 def libDir = file( "lib" )
@@ -17,12 +16,10 @@ configurations {
 }
 
 dependencies {
-    antlr "org.antlr:antlr4:4.9.2"
     app "org.antlr:antlr4:4.9.2"
     app 'com.github.javaparser:javaparser-core:3.22.1'
     app 'info.picocli:picocli:4.6.1'
     core fileTree( dir: libDir, include: '*.jar' )
-
 }
 
 sourceSets {
@@ -31,28 +28,17 @@ sourceSets {
         compileClasspath += configurations.core
     }
     app {
-        antlr.srcDir 'src/app/antlr'
         java.srcDir 'src/app/java'
-        runtimeClasspath += compileClasspath += configurations.core + configurations.app + configurations.antlr + sourceSets.core.output
+        runtimeClasspath += compileClasspath += configurations.core + configurations.app + sourceSets.core.output
     }
     test {
-        runtimeClasspath += compileClasspath += configurations.core + configurations.app + sourceSets.core.output
+        runtimeClasspath += compileClasspath += configurations.core + configurations.app + sourceSets.core.output + sourceSets.app.output
     }
 }
 
 build {
     dependsOn compileCoreJava
     dependsOn compileAppJava
-}
-
-generateGrammarSource {
-    dependsOn generateAppGrammarSource
-}
-
-generateAppGrammarSource {
-    description "Compilation of the Antlr jsdt.grammar to Java Sources"
-    outputDirectory file( 'src/app/java/jsdt/grammar' )
-    arguments += ['-package', 'jsdt.grammar', '-visitor']
 }
 
 def jarOutputFolder = "dist"
