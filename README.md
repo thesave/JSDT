@@ -51,9 +51,3 @@ JavaService Development Tool
       --type                  Indicates that the target symbol is a type, instead of an interface.
   -V, --version               Print version information and exit.
 ```
-
-## Roadmap
-
-- [ ] resolve type references
-- [ ] resolve imports 
-- [ ] support the full Jolie syntax
