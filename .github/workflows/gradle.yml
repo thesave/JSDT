@@ -45,6 +45,7 @@ jobs:
         with:
           tag_name: ${{ github.event.inputs.version }}
           release_name: Release ${{ github.event.inputs.version }}
+          body: Release ${{ github.event.inputs.version }}
           draft: false
           prerelease: false
 
