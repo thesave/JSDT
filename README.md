@@ -20,9 +20,9 @@ JSDT has no dependencies (the released jar contains them already)
 
 The generated code has the following dependencies:
 
-- [jolie](https://mvnrepository.com/artifact/org.jolie-lang/jolie);
-- [libjolie](https://mvnrepository.com/artifact/org.jolie-lang/libjolie);
-- [jolie-cli](https://mvnrepository.com/artifact/org.jolie-lang/jolie-cli);
+- [jolie](https://mvnrepository.com/artifact/org.jolie-lang/jolie) 1.10.4+;
+- [libjolie](https://mvnrepository.com/artifact/org.jolie-lang/libjolie); 1.10.4+
+- [jolie-cli](https://mvnrepository.com/artifact/org.jolie-lang/jolie-cli) 1.10.4+;
 - [jsdt-core](https://github.com/thesave/JSDT/releases) (from this repository, see the [release page](https://github.com/thesave/JSDT/releases)).
 
 ## Usage
