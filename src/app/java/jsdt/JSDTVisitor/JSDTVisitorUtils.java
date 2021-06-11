@@ -45,7 +45,7 @@ class JSDTVisitorUtils {
 				return "Double";
 			case RAW:
 				return "ByteArray";
-			default: // "any"
+			default: // "any" or "undefined"
 				return "Value";
 		}
 	}
@@ -71,7 +71,7 @@ class JSDTVisitorUtils {
 			case RAW:
 				checker = "isByteArray";
 				break;
-			default: // "any" or "void"
+			default: // "void", "any" or "undefined"
 		}
 		return Optional.ofNullable( checker );
 	}
@@ -124,10 +124,10 @@ class JSDTVisitorUtils {
 			case "string":
 				getter = "strValue";
 				break;
-			case "byte":
+			case "raw":
 				getter = "byteArrayValue";
 				break;
-			default: // "void" or "any"
+			default: // "void", "any" or "undefined"
 				;
 		}
 		return getter;

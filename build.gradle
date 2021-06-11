@@ -19,7 +19,9 @@ dependencies {
     app "org.antlr:antlr4:4.9.2"
     app 'com.github.javaparser:javaparser-core:3.22.1'
     app 'info.picocli:picocli:4.6.1'
-    core fileTree( dir: libDir, include: '*.jar' )
+    core 'org.jolie-lang:jolie:1.10.4'
+    core 'org.jolie-lang:libjolie:1.10.4'
+    core 'org.jolie-lang:jolie-cli:1.10.4'
 }
 
 sourceSets {

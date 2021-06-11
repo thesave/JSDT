@@ -75,12 +75,12 @@ public class JSDTVisitor implements OLVisitor< Void, Void > {
 		return jsdt.compilationUnits;
 	}
 
-	public static List< CompilationUnit > generateInterfaceAndTypeClasses( InterfaceDefinition ctx, String packageName ){
+	public static List< CompilationUnit > generateInterfaceAndTypeClasses( InterfaceDefinition ctx, String packageName ) {
 		JSDTVisitor jsdt = new JSDTVisitor( packageName );
 		jsdt.visit( ctx, null );
 		jsdt.collectedInterfaceTypes.forEach( td -> {
 			jsdt.compilationUnits.addAll( generateTypeClasses( td, packageName ) );
-		});
+		} );
 		return jsdt.compilationUnits;
 	}
 
@@ -422,6 +422,9 @@ public class JSDTVisitor implements OLVisitor< Void, Void > {
 
 	@Override
 	public Void visit( TypeInlineDefinition typeInlineDefinition, Void unused ) {
+		if ( typeInlineDefinition.name().equals( "undefined" ) ) {
+			return null;
+		}
 		visitedTypes.add( typeInlineDefinition.name() );
 		BasicTypeDefinition basicTypeDefinition = typeInlineDefinition.basicType();
 		Set< Map.Entry< String, TypeDefinition > > subNodes = typeInlineDefinition.subTypes();
@@ -433,6 +436,9 @@ public class JSDTVisitor implements OLVisitor< Void, Void > {
 		compilationUnit.addImport( "jolie.runtime.Value" );
 
 		String javaNativeType = jolieToJavaType( basicTypeDefinition.nativeType() );
+		if ( javaNativeType.equals( "ByteArray" ) ) {
+			compilationUnit.addImport( "jolie.runtime.ByteArray" );
+		}
 
 		ClassOrInterfaceDeclaration theClass = compilationUnit.addClass( getLineage() )
 						.setModifier( Modifier.Keyword.PUBLIC, true )
@@ -488,6 +494,11 @@ public class JSDTVisitor implements OLVisitor< Void, Void > {
 					compilationUnit.addImport( "java.util.stream.Collectors" );
 				}
 				String fieldTypeName = node instanceof TypeDefinitionLink ? ( ( TypeDefinitionLink ) node ).linkedTypeName() : getLineage();
+				switch ( fieldTypeName ) {
+					case "undefined":
+					case "any":
+						fieldTypeName = "Value";
+				}
 				FieldDeclaration field = theClass.addField(
 								cardinalityClass + "<" + fieldTypeName + ">",
 								nodeName,
@@ -502,19 +513,29 @@ public class JSDTVisitor implements OLVisitor< Void, Void > {
 									.add( nodeName )
 									.add( "=" )
 									.add( cardinalityClass + ".of( value.getChildren(" )
-									.add( "\"" + nodeName + "\"" )
-									.add( ").stream().map(" )
-									.add( fieldTypeName + "::parse" )
-									.add( ").collect( Collectors.toList() ) );" );
+									.add( "\"" + nodeName + "\"" );
+					if ( !fieldTypeName.equals( "Value" ) ) {
+						s.add( ").stream().map(" )
+										.add( fieldTypeName + "::parse" );
+					} else {
+						s.add( ").stream(" );
+					}
+					s.add( ").collect( Collectors.toList() ) );" );
 				} else {
 					s.add( cardinalityClass + "<" + fieldTypeName + ">" )
 									.add( nodeName )
 									.add( "=" )
-									.add( cardinalityClass + ".of(" )
-									.add( fieldTypeName + ".parse(" )
-									.add( "value.getChildren(" )
-									.add( "\"" + nodeName + "\"" )
-									.add( ").get( 0 ) ) );" );
+									.add( cardinalityClass + ".of(" );
+					if ( fieldTypeName.equals( "Value" ) ) {
+						s.add( "value.getChildren(" )
+										.add( "\"" + nodeName + "\"" )
+										.add( ").get( 0 ) );" );
+					} else {
+						s.add( fieldTypeName + ".parse(" )
+										.add( "value.getChildren(" )
+										.add( "\"" + nodeName + "\"" )
+										.add( ").get( 0 ) ) );" );
+					}
 				}
 				ifBranch.addStatement( s.toString() );
 				parseReturnParameters.add( nodeName );
@@ -576,19 +597,34 @@ public class JSDTVisitor implements OLVisitor< Void, Void > {
 				case "string":
 					methodBody.addStatement( "String request = value." + jolieToGetValue( requestType.name() ) + "();" );
 					break;
-				case "byte":
+				case "raw":
+					compilationUnit.addImport( "jolie.runtime.ByteArray" );
 					methodBody.addStatement( "ByteArray request = value." + jolieToGetValue( requestType.name() ) + "();" );
 					break;
 				default:
-					collectedInterfaceTypes.add( requestType );
-					methodBody.addStatement( requestType.name() + " request = " + requestType.name() + ".parse( value );" );
+					switch ( requestType.name() ) {
+						case "any":
+						case "undefined":
+							break;
+						default:
+							collectedInterfaceTypes.add( requestType );
+							methodBody.addStatement( requestType.name() + " request = " + requestType.name() + ".parse( value );" );
+					}
 			}
 			if ( operation instanceof RequestResponseOperationDeclaration ) {
 				compilationUnit.addImport( "jolie.runtime.embedding.RequestResponse" );
 				methodDeclaration.addAnnotation( "RequestResponse" );
 				TypeDefinition responseType = ( ( RequestResponseOperationDeclaration ) operation ).responseType();
 				switch ( responseType.name() ) {
-					case "void": case "bool": case "int": case "double": case "long": case "string": case "byte":
+					case "void":
+					case "bool":
+					case "int":
+					case "double":
+					case "long":
+					case "string":
+					case "raw":
+					case "any":
+					case "undefined":
 						break;
 					default:
 						collectedInterfaceTypes.add( responseType );
