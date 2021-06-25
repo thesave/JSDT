@@ -12,7 +12,9 @@ For types, JSDT generates classes providing a `parse` (static) and `toValue` met
 
 ## Installation
 
-Download the latest `jsdt-{version}.jar` file from the [release page](https://github.com/thesave/JSDT/releases).
+Install through jpm via `jpm add @thesave/jsdt_core`.
+
+Otherwise, download the latest `jsdt-{version}.jar` file from the [release page](https://github.com/thesave/JSDT/releases).
 
 ## Dependencies
 
