@@ -8,6 +8,7 @@ apply plugin: 'java'
 apply plugin: 'application'
 
 def libDir = file( "lib" )
+def releaseDir = file( "release" )
 
 configurations {
     core
@@ -45,7 +46,7 @@ build {
 
 def jarOutputFolder = "dist"
 
-version "0.2"
+version "0.2.1"
 
 task setVersion {
     File file = projectDir.toPath().resolve("src/app/resources/project.properties" ).toFile();
@@ -91,4 +92,29 @@ jar {
 
 clean.doFirst{
     delete jarOutputFolder
+    delete releaseDir
+}
+
+import org.apache.tools.ant.filters.ReplaceTokens
+
+task makeRelease {
+    tasks.compileJava.mustRunAfter( clean )
+    dependsOn( clean )
+    dependsOn( build )
+    dependsOn( jar )
+    doLast{
+        copy {
+            from( jarOutputFolder ){
+                include "jsdt-core*.jar"
+            }
+            into releaseDir.toPath().resolve( "dist" )
+        }
+        copy {
+            from( projectDir ){
+                include "jpm.json"
+            }
+            into releaseDir
+            filter( ReplaceTokens, tokens: [ VERSION: version ] )
+        }
+    }
 }

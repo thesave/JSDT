@@ -1,0 +1,23 @@
+{
+  "name": "@thesave/jsdt_core",
+  "description": "The JDST core library.",
+  "collaborators": [
+     "Saverio Giallorenzo"
+  ],
+  "version": "@VERSION@",
+  "license": "LGPL 2.1",
+  "keywords": [
+     "JSDT",
+     "jolie"
+  ],
+  "scripts": {
+     "jolive": "npx nodemon --exec jolie ./server.ol",
+     "clean": "rm ./hs_err_pid*"
+  },
+  "distJar": "jsdt-core-@VERSION@.jar",
+  "dependencies": {
+     "mvn": {},
+     "npm": {}
+  },
+  "mvnPeers": {}
+}
