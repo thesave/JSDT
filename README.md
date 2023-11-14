@@ -8,7 +8,7 @@ JSDT generates Java-idiomatic classes to manage in a transparent way Jolie data 
 
 For interfaces, JSDT minimises the boilerplate code developers need to write by generating a skeleton JavaService that implements the operations in the interface and that, as their first action, convert (`parse`) the request (a Jolie `Value`) into the relative JSDT-generated Java class.
 
-For types, JSDT generates classes providing a `parse` (static) and `toValue` method to respetively instantiate a JSDT-generated class from a Jolie Value (e.g., useful to convert the Value parameter from an invocation) and, vice versa, to obtain a Jolie Value from an instance of a JSDT-generated class (e.g., to assemble the response for an invocation).
+For types, JSDT generates classes providing a `parse` (static) and `toValue` method to respectively instantiate a JSDT-generated class from a Jolie Value (e.g., useful to convert the Value parameter from an invocation) and, vice versa, to obtain a Jolie Value from an instance of a JSDT-generated class (e.g., to assemble the response for an invocation).
 
 ## Installation
 
