@@ -1,4 +1,4 @@
-# JavaServices Development Tools
+# Java Services Development Tools
 
 JSDT is a tool to generate Java classes from a Jolie interface and its types (used by its operations).
 
